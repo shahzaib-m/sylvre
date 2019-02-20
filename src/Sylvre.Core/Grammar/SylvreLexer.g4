@@ -79,3 +79,5 @@ WS              : [ \t\r\n]+ -> channel(HIDDEN) ;
 COMMENT         : '/*' .*? '*/' -> skip ;
 LINE_COMMENT    : '//' ~[\r\n]* -> skip ;
 NEWLINE         : '\r'? '\n' -> skip ;
+
+Unknown	: . ;	// catch all unknown tokens

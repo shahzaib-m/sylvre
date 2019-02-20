@@ -45,7 +45,7 @@ public partial class SylvreParser : Parser {
 		ELSE=35, LOOPWHILE=36, LOOPFOR=37, AND=38, OR=39, NOT=40, TRUE=41, FALSE=42, 
 		GREATER_THAN=43, GREATER_EQUAL=44, LESS_THAN=45, LESS_EQUAL=46, EQUALS=47, 
 		IDENTIFIER=48, NUMBER=49, DECIMAL=50, WS=51, COMMENT=52, LINE_COMMENT=53, 
-		NEWLINE=54;
+		NEWLINE=54, Unknown=55;
 	public const int
 		RULE_program = 0, RULE_seperator = 1, RULE_block = 2, RULE_nestable_block = 3, 
 		RULE_use_file_statement = 4, RULE_statement_block = 5, RULE_function_block = 6, 
@@ -92,7 +92,7 @@ public partial class SylvreParser : Parser {
 		"PARAMS", "CREATE", "CALL", "EXIT", "WITH", "IF", "ELSEIF", "ELSE", "LOOPWHILE", 
 		"LOOPFOR", "AND", "OR", "NOT", "TRUE", "FALSE", "GREATER_THAN", "GREATER_EQUAL", 
 		"LESS_THAN", "LESS_EQUAL", "EQUALS", "IDENTIFIER", "NUMBER", "DECIMAL", 
-		"WS", "COMMENT", "LINE_COMMENT", "NEWLINE"
+		"WS", "COMMENT", "LINE_COMMENT", "NEWLINE", "Unknown"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -2924,7 +2924,7 @@ public partial class SylvreParser : Parser {
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
-		'\x5964', '\x3', '\x38', '\x1B2', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+		'\x5964', '\x3', '\x39', '\x1B2', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
 		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x4', '\x5', '\t', '\x5', '\x4', 
 		'\x6', '\t', '\x6', '\x4', '\a', '\t', '\a', '\x4', '\b', '\t', '\b', 
 		'\x4', '\t', '\t', '\t', '\x4', '\n', '\t', '\n', '\x4', '\v', '\t', '\v', 
