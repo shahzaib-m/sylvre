@@ -1,0 +1,54 @@
+// QuickSort algorithm in Sylvre
+// https://www.geeksforgeeks.org/quick-sort/
+
+function quickSort PARAMS num_array, low, high
+<
+	if (low LTHAN high)
+	<
+		create pivot = call partition(num_array, low, high)#
+
+		call quickSort(num_array, low, pivot - 1)#
+		call quickSort(num_array, pivot + 1, high)#
+	>
+>
+
+function partition PARAMS num_array, low, high
+<
+	create pivot = num_array[high]#
+
+	create i = low - 1#
+	loopfor (create j = low# j LTHAN high# j increment)
+	<
+		if (num_array[j] LEQUAL pivot)
+		<
+			i increment#
+		
+			create temp = num_array[i]#
+			num_array[i] = num_array[j]#
+			num_array[j] = temp#
+		>
+	>
+
+	create temp num_array[i+1]#		// ERROR ending with '=' after 'temp'
+	num_array[i+1] = num_array[high]#
+	num_array[high] = temp#
+
+	exit with i + 1#
+>
+
+function arrayToString PARAMS array <
+	create result = ""#
+
+	loopfor (create i = 0# i LTHAN array.length# increment i) <
+		result += array[i] + " "#
+	>
+	
+	exit with result;	// ERROR ending with ';' instead of '#'
+>
+
+
+create num_array = [ 2, 5, -4, 11, 0, 18, 22, 67, 51, 6 ]#
+call Sylvre.Console.output("Original array: " + call arrayToString(num_array))#
+
+quickSort(num_array, 0, num_array.length - 1)#	// ERROR missing 'call' before quickSort()
+call Sylvre.Console.output("Sorted array:   " + call arrayToString(num_array))#

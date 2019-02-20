@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Sylvre.Core
 {
     [Serializable]
-    internal class SylvreParseException : Exception
+    public class SylvreParseException : Exception
     {
         public SylvreParseException()
         {
