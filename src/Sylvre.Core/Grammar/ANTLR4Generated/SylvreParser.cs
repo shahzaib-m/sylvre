@@ -139,6 +139,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_program; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterProgram(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitProgram(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitProgram(this);
@@ -188,6 +196,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_seperator; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterSeperator(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitSeperator(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSeperator(this);
@@ -249,6 +265,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterBlock(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitBlock(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBlock(this);
@@ -370,6 +394,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_nestable_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterNestable_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitNestable_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNestable_block(this);
@@ -465,6 +497,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_use_file_statement; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUse_file_statement(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUse_file_statement(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUse_file_statement(this);
@@ -517,6 +557,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_statement_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterStatement_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitStatement_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStatement_block(this);
@@ -568,6 +616,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_function_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterFunction_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitFunction_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunction_block(this);
@@ -643,6 +699,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_if_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterIf_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitIf_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIf_block(this);
@@ -710,6 +774,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_elseif_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterElseif_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitElseif_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitElseif_block(this);
@@ -772,6 +844,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_else_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterElse_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitElse_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitElse_block(this);
@@ -836,6 +916,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_loopwhile_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterLoopwhile_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitLoopwhile_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLoopwhile_block(this);
@@ -921,6 +1009,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_loopfor_block; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterLoopfor_block(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitLoopfor_block(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLoopfor_block(this);
@@ -1035,6 +1131,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_conditional_expression; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterConditional_expression(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitConditional_expression(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitConditional_expression(this);
@@ -1146,6 +1250,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_comparison_operator; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterComparison_operator(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitComparison_operator(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitComparison_operator(this);
@@ -1191,6 +1303,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_logical_operator; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterLogical_operator(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitLogical_operator(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLogical_operator(this);
@@ -1236,6 +1356,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_bool; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterBool(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitBool(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBool(this);
@@ -1289,6 +1417,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_parameters; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterParameters(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitParameters(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitParameters(this);
@@ -1348,6 +1484,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_arguments; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterArguments(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitArguments(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArguments(this);
@@ -1415,6 +1559,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_statement; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterStatement(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitStatement(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStatement(this);
@@ -1498,6 +1650,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_declaration; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterDeclaration(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitDeclaration(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDeclaration(this);
@@ -1562,6 +1722,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_assignment; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterAssignment(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitAssignment(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignment(this);
@@ -1617,6 +1785,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_assignment_operator; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterAssignment_operator(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitAssignment_operator(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignment_operator(this);
@@ -1665,6 +1841,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_array_assignment; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterArray_assignment(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitArray_assignment(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArray_assignment(this);
@@ -1720,6 +1904,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_array_elements; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterArray_elements(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitArray_elements(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArray_elements(this);
@@ -1778,6 +1970,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_function_call; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterFunction_call(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitFunction_call(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunction_call(this);
@@ -1829,6 +2029,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_function_return; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterFunction_return(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitFunction_return(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunction_return(this);
@@ -1877,6 +2085,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_function_return_value; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterFunction_return_value(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitFunction_return_value(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunction_return_value(this);
@@ -1921,6 +2137,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_expression; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterExpression(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitExpression(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExpression(this);
@@ -1978,6 +2202,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_term; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterTerm(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitTerm(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitTerm(this);
@@ -2052,6 +2284,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_factor; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterFactor(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitFactor(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFactor(this);
@@ -2165,6 +2405,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_arithmetic_operator; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterArithmetic_operator(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitArithmetic_operator(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArithmetic_operator(this);
@@ -2211,6 +2459,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_string; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterString(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitString(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitString(this);
@@ -2255,6 +2511,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variable_reference; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterVariable_reference(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitVariable_reference(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariable_reference(this);
@@ -2298,6 +2562,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variable_complex_reference; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterVariable_complex_reference(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitVariable_complex_reference(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariable_complex_reference(this);
@@ -2357,6 +2629,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variable_complex_reference_left; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterVariable_complex_reference_left(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitVariable_complex_reference_left(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariable_complex_reference_left(this);
@@ -2411,6 +2691,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variable_suffix; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterVariable_suffix(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitVariable_suffix(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariable_suffix(this);
@@ -2465,6 +2753,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_variable_suffix_left; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterVariable_suffix_left(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitVariable_suffix_left(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariable_suffix_left(this);
@@ -2520,6 +2816,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_member_reference; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterMember_reference(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitMember_reference(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMember_reference(this);
@@ -2574,6 +2878,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_member_reference_left; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterMember_reference_left(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitMember_reference_left(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMember_reference_left(this);
@@ -2614,6 +2926,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_index_reference; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterIndex_reference(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitIndex_reference(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIndex_reference(this);
@@ -2656,6 +2976,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_unary_increment; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUnary_increment(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUnary_increment(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnary_increment(this);
@@ -2710,6 +3038,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_unary_decrement; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUnary_decrement(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUnary_decrement(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnary_decrement(this);
@@ -2762,6 +3098,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_unary_prefix_increment; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUnary_prefix_increment(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUnary_prefix_increment(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnary_prefix_increment(this);
@@ -2801,6 +3145,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_unary_prefix_decrement; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUnary_prefix_decrement(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUnary_prefix_decrement(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnary_prefix_decrement(this);
@@ -2840,6 +3192,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_unary_suffix_increment; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUnary_suffix_increment(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUnary_suffix_increment(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnary_suffix_increment(this);
@@ -2879,6 +3239,14 @@ public partial class SylvreParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_unary_suffix_decrement; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.EnterUnary_suffix_decrement(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			ISylvreParserListener typedListener = listener as ISylvreParserListener;
+			if (typedListener != null) typedListener.ExitUnary_suffix_decrement(this);
+		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISylvreParserVisitor<TResult> typedVisitor = visitor as ISylvreParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnary_suffix_decrement(this);
