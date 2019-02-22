@@ -17,7 +17,7 @@ namespace Sylvre.Tests.Core
         }
 
         [Test]
-        public void Should_Not_Throw_Parse_Exception_With_Good_Sylvre()
+        public void Should_Not_Have_Errors_With_Good_Sylvre()
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "Sylvre.Tests.Core.TestData.quickSort.syl";
@@ -25,7 +25,24 @@ namespace Sylvre.Tests.Core
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                Assert.DoesNotThrow(() => Parser.ParseSylvreInput(reader.ReadToEnd()));
+                SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
+
+                Assert.IsFalse(result.HasParseErrors);
+            }
+        }
+
+        [Test]
+        public void Should_Have_Empty_ParseErrors_Property_With_Good_Sylvre()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Sylvre.Tests.Core.TestData.quickSort.syl";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
+
+                Assert.AreEqual(0, result.ParseErrors.Count);
             }
         }
 
