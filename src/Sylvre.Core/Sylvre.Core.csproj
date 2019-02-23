@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    
+    <None Remove="Transpilers\JavaScript\JavaScriptReservedKeywords.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Transpilers\JavaScript\JavaScriptReservedKeywords.txt" />
   </ItemGroup>
 
   <ItemGroup>
