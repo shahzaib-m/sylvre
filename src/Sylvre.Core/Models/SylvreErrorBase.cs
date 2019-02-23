@@ -18,7 +18,7 @@
         /// </summary>
         public int CharPositionInLine { get; set; }
         /// <summary>
-        /// The error message detailing the parse error.
+        /// The error message detailing the error.
         /// </summary>
         public string Message { get; set; }
     }
