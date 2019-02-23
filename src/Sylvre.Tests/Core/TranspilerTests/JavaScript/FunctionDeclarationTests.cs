@@ -23,8 +23,11 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
            @"""use strict"";[\n ]*function[\n ]+quickSort\(single\)[\n ]*{[\n ]*}")]
         public void Should_Output_Valid_JavaScript_Function(string sylvreInput, string jsRegex)
         {
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
-                Parser.ParseSylvreInput(sylvreInput), TargetLanguage.Javascript);
+                program, TargetLanguage.Javascript);
 
             StringAssert.IsMatch(jsRegex, output.TranspiledCode);
         }
@@ -34,8 +37,11 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         [TestCase("function quickSort PARAMS single < >")]
         public void Should_Not_Provide_Transpile_Errors(string sylvreInput)
         {
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
-               Parser.ParseSylvreInput(sylvreInput), TargetLanguage.Javascript);
+                program, TargetLanguage.Javascript);
 
             Assert.IsFalse(output.HasTranspileErrors);
         }

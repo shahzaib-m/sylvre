@@ -15,28 +15,40 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         [Test]
         public void Should_Output_Valid_If_Statement()
         {
-            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
-                Parser.ParseSylvreInput("if () < >"), TargetLanguage.Javascript);
+            string sylvreInput = "if (TRUE) < >";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
 
-            StringAssert.IsMatch(@"""use strict"";if[\n ]*\(\)[\n ]*{[\n ]*}",
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(@"""use strict"";if[\n ]*\(.*\)[\n ]*{[\n ]*}",
                 output.TranspiledCode);
         }
 
         [Test]
         public void Should_Output_Valid_ElseIf_Statement()
         {
-            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
-                Parser.ParseSylvreInput("if () < > elseif () < >"), TargetLanguage.Javascript);
+            string sylvreInput = "if (TRUE) < > elseif (TRUE) < >";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
 
-            StringAssert.IsMatch(@"""use strict"";.+else[\n ]+if[\n ]*\(\)[\n ]*{[\n ]*}",
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(@"""use strict"";.+else[\n ]+if[\n ]*\(.*\)[\n ]*{[\n ]*}",
                 output.TranspiledCode);
         }
 
         [Test]
         public void Should_Output_Valid_Else_Statement()
         {
+            string sylvreInput = "if (TRUE) <> else < >";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
-                Parser.ParseSylvreInput("if () <> else < >"), TargetLanguage.Javascript);
+                program, TargetLanguage.Javascript);
 
             StringAssert.IsMatch(@"""use strict"";.+else[\n ]*{[\n ]*}",
                 output.TranspiledCode);
