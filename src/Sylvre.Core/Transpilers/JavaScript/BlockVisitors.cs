@@ -40,7 +40,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
             }
             else if (context.loopfor_block() != null)
             {
-                throw new NotImplementedException();
+                VisitLoopfor_block(context.loopfor_block());
             }
             else if (context.statement_block() != null)
             {
@@ -139,6 +139,43 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
             VisitConditional_expression(context.conditional_expression());
 
+            _output.Append(')')
+                   .Append('{');
+
+            foreach (var nestableBlock in context.nestable_block())
+            {
+                VisitNestable_block(nestableBlock);
+            }
+
+            _output.Append('}');
+
+            return null;
+        }
+        public override object VisitLoopfor_block([NotNull] Loopfor_blockContext context)
+        {
+            _output.Append("for(");
+
+            if (context.declaration() != null)
+            {
+                VisitDeclaration(context.declaration());
+            }
+            else
+            {
+                VisitAssignment(context.assignment()[0]);
+            }
+            _output.Append(';');
+
+            VisitConditional_expression(context.conditional_expression());
+            _output.Append(';');
+
+            if (context.expression() != null)
+            {
+                VisitExpression(context.expression());
+            }
+            else
+            {
+                VisitAssignment(context.assignment()[context.assignment().Length - 1]);
+            }
             _output.Append(')')
                    .Append('{');
 
