@@ -36,7 +36,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
             }
             else if (context.loopwhile_block() != null)
             {
-                throw new NotImplementedException();
+                VisitLoopwhile_block(context.loopwhile_block());
             }
             else if (context.loopfor_block() != null)
             {
@@ -122,6 +122,25 @@ namespace Sylvre.Core.Transpilers.JavaScript
         public override object VisitElse_block([NotNull] Else_blockContext context)
         {
             _output.Append("else{");
+
+            foreach (var nestableBlock in context.nestable_block())
+            {
+                VisitNestable_block(nestableBlock);
+            }
+
+            _output.Append('}');
+
+            return null;
+        }
+
+        public override object VisitLoopwhile_block([NotNull] Loopwhile_blockContext context)
+        {
+            _output.Append("while(");
+
+            VisitConditional_expression(context.conditional_expression());
+
+            _output.Append(')')
+                   .Append('{');
 
             foreach (var nestableBlock in context.nestable_block())
             {
