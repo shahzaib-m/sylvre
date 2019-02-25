@@ -1636,9 +1636,7 @@ public partial class SylvreParser : Parser {
 		public Variable_referenceContext variable_reference() {
 			return GetRuleContext<Variable_referenceContext>(0);
 		}
-		public Assignment_operatorContext assignment_operator() {
-			return GetRuleContext<Assignment_operatorContext>(0);
-		}
+		public ITerminalNode EQUALSYMBOL() { return GetToken(SylvreParser.EQUALSYMBOL, 0); }
 		public Conditional_expressionContext conditional_expression() {
 			return GetRuleContext<Conditional_expressionContext>(0);
 		}
@@ -1678,7 +1676,7 @@ public partial class SylvreParser : Parser {
 				{
 				State = 284; Match(CREATE);
 				State = 285; variable_reference();
-				State = 286; assignment_operator();
+				State = 286; Match(EQUALSYMBOL);
 				State = 287; conditional_expression(0);
 				}
 				break;
@@ -1687,7 +1685,7 @@ public partial class SylvreParser : Parser {
 				{
 				State = 289; Match(CREATE);
 				State = 290; variable_reference();
-				State = 291; assignment_operator();
+				State = 291; Match(EQUALSYMBOL);
 				State = 292; array_assignment();
 				}
 				break;
@@ -3547,10 +3545,10 @@ public partial class SylvreParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\x11C', '\x11A', '\x3', '\x2', '\x2', '\x2', 
 		'\x11C', '\x11B', '\x3', '\x2', '\x2', '\x2', '\x11D', '\'', '\x3', '\x2', 
 		'\x2', '\x2', '\x11E', '\x11F', '\a', '\x1F', '\x2', '\x2', '\x11F', '\x120', 
-		'\x5', '\x42', '\"', '\x2', '\x120', '\x121', '\x5', ',', '\x17', '\x2', 
+		'\x5', '\x42', '\"', '\x2', '\x120', '\x121', '\a', '\x1A', '\x2', '\x2', 
 		'\x121', '\x122', '\x5', '\x1A', '\xE', '\x2', '\x122', '\x129', '\x3', 
 		'\x2', '\x2', '\x2', '\x123', '\x124', '\a', '\x1F', '\x2', '\x2', '\x124', 
-		'\x125', '\x5', '\x42', '\"', '\x2', '\x125', '\x126', '\x5', ',', '\x17', 
+		'\x125', '\x5', '\x42', '\"', '\x2', '\x125', '\x126', '\a', '\x1A', '\x2', 
 		'\x2', '\x126', '\x127', '\x5', '.', '\x18', '\x2', '\x127', '\x129', 
 		'\x3', '\x2', '\x2', '\x2', '\x128', '\x11E', '\x3', '\x2', '\x2', '\x2', 
 		'\x128', '\x123', '\x3', '\x2', '\x2', '\x2', '\x129', ')', '\x3', '\x2', 

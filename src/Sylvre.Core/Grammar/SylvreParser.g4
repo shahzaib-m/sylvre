@@ -86,8 +86,8 @@ statement   : declaration
             | unary_decrement
             ;
 
-declaration : CREATE variable_reference assignment_operator conditional_expression
-            | CREATE variable_reference assignment_operator array_assignment
+declaration : CREATE variable_reference EQUALSYMBOL conditional_expression
+            | CREATE variable_reference EQUALSYMBOL array_assignment
             ;  
 assignment  : variable_complex_reference_left assignment_operator conditional_expression
             | variable_complex_reference_left assignment_operator array_assignment
