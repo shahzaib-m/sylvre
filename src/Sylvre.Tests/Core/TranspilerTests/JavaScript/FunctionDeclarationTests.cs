@@ -45,5 +45,30 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 
             Assert.IsFalse(output.HasTranspileErrors);
         }
+
+        [TestCase(
+            "function var < >",
+           @"""use strict"";function[\n ]+__var\(\)[\n ]*{[\n ]*}")]
+        [TestCase(
+            "function class < >",
+           @"""use strict"";function[\n ]+__class\(\)[\n ]*{[\n ]*}")]
+        [TestCase(
+            "function return < >",
+           @"""use strict"";function[\n ]+__return\(\)[\n ]*{[\n ]*}")]
+        [TestCase(
+            "function true < >",
+           @"""use strict"";function[\n ]+__true\(\)[\n ]*{[\n ]*}")]
+        public void Should_Append_Two_Underscores_If_FuncName_Is_Reserved_Keyword(string sylvreInput, string regexToMatch)
+        {
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            Assert.IsFalse(output.HasTranspileErrors);
+
+            StringAssert.IsMatch(regexToMatch, output.TranspiledCode);
+        }
     }
 }

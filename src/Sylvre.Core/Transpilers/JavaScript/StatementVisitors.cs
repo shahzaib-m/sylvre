@@ -32,13 +32,9 @@ namespace Sylvre.Core.Transpilers.JavaScript
                 });
             }
 
-            bool isVariableNameReserved = JavaScriptReservedKeywords.IsReservedKeyword(
-                context.variable_reference().GetText());
-
-            _output.Append("var ")
-                   .Append(isVariableNameReserved ? "__" : "")  // appending two underscores if the var name is a reserved JS keyword
-                   .Append(context.variable_reference().GetText())
-                   .Append(context.EQUALSYMBOL().GetText());
+            _output.Append("var ");
+            VisitVariable_reference(context.variable_reference());
+            _output.Append(context.EQUALSYMBOL().GetText());
 
             if (context.conditional_expression() != null)
             {

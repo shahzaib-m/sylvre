@@ -53,16 +53,16 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
         public override object VisitFunction_block([NotNull] Function_blockContext context)
         {
-            _output.Append("function ")
-                   .Append(context.variable_reference().GetText())
-                   .Append('(');
+            _output.Append("function ");
+            VisitVariable_reference(context.variable_reference());
+            _output.Append('(');
 
             if (context.parameters() != null)
             {
                 var variableReferences = context.parameters().variable_reference();
                 for (int i = 0; i < variableReferences.Length; i++)
                 {
-                    _output.Append(variableReferences[i].GetText());
+                    VisitVariable_reference(variableReferences[i]);
 
                     if (i != variableReferences.Length - 1)
                     {

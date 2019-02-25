@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 {
-    class VariableDeclarationTestscs
+    class VariableDeclarationTests
     {
         [SetUp]
         public void Setup()
