@@ -38,7 +38,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append("var ")
                    .Append(isVariableNameReserved ? "__" : "")  // appending two underscores if the var name is a reserved JS keyword
                    .Append(context.variable_reference().GetText())
-                   .Append('=');
+                   .Append(context.EQUALSYMBOL().GetText());
 
             if (context.conditional_expression() != null)
             {
