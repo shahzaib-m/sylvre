@@ -44,7 +44,8 @@ namespace Sylvre.Core.Transpilers.JavaScript
             }
             else if (context.statement_block() != null)
             {
-                throw new NotImplementedException();
+                VisitStatement_block(context.statement_block());
+                _output.Append(';');
             }
 
             return null;
