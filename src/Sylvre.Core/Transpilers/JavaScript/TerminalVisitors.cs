@@ -16,5 +16,19 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
             return null;
         }
+
+        public override object VisitArithmetic_operator([NotNull] Arithmetic_operatorContext context)
+        {
+            if (context.PLUS() != null)
+                _output.Append('+');
+            else if (context.MINUS() != null)
+                _output.Append('-');
+            else if (context.MULTIPLY() != null)
+                _output.Append('*');
+            else if (context.DIVIDE() != null)
+                _output.Append('/');
+
+            return null;
+        }
     }
 }
