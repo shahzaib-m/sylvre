@@ -14,6 +14,10 @@ namespace Sylvre.Core.Transpilers.JavaScript
             {
                 VisitDeclaration(context.declaration());
             }
+            else if (context.function_call() != null)
+            {
+                VisitFunction_call(context.function_call());
+            }
 
             return null;
         }
@@ -45,6 +49,29 @@ namespace Sylvre.Core.Transpilers.JavaScript
                 VisitArray_assignment(context.array_assignment());
             }
 
+            return null;
+        }
+
+        public override object VisitFunction_call([NotNull] Function_callContext context)
+        {
+            VisitVariable_complex_reference(context.variable_complex_reference());
+            _output.Append('(');
+
+            if (context.arguments() != null)
+            {
+                var conditionalExpressions = context.arguments().conditional_expression();
+                for (int i = 0; i < conditionalExpressions.Length; i++)
+                {
+                    VisitConditional_expression(conditionalExpressions[i]);
+
+                    if (i != conditionalExpressions.Length - 1)
+                    {
+                        _output.Append(',');
+                    }
+                }
+            }
+
+            _output.Append(')');
             return null;
         }
     }
