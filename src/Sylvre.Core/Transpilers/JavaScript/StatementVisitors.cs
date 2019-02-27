@@ -14,6 +14,10 @@ namespace Sylvre.Core.Transpilers.JavaScript
             {
                 VisitDeclaration(context.declaration());
             }
+            else if (context.assignment() != null)
+            {
+                VisitAssignment(context.assignment());
+            }
             else if (context.function_call() != null)
             {
                 VisitFunction_call(context.function_call());
@@ -51,6 +55,34 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append("var ");
             VisitVariable_reference(context.variable_reference());
             _output.Append(context.EQUALSYMBOL().GetText());
+
+            if (context.conditional_expression() != null)
+            {
+                VisitConditional_expression(context.conditional_expression());
+            }
+            else
+            {
+                VisitArray_assignment(context.array_assignment());
+            }
+
+            return null;
+        }
+        public override object VisitAssignment([NotNull] AssignmentContext context)
+        {
+            // checking if 'Sylvre' is being declared and assigned to. Sylvre is a builtin library so disallowed
+            if (context.variable_complex_reference_left().GetText() == "Sylvre")
+            {
+                _transpileErrors.Add(new SylvreTranspileError
+                {
+                    CharPositionInLine = context.variable_complex_reference_left().Start.Column + 1, // Column number 1 behind, zero based index?
+                    Line = context.variable_complex_reference_left().Start.Line,
+                    Symbol = context.variable_complex_reference_left().Start.Text,
+                    Message = _sylvreDeclarationDisallowedMessage
+                });
+            }
+
+            VisitVariable_complex_reference_left(context.variable_complex_reference_left());
+            VisitAssignment_operator(context.assignment_operator());
 
             if (context.conditional_expression() != null)
             {
@@ -127,6 +159,28 @@ namespace Sylvre.Core.Transpilers.JavaScript
                 _output.Append("--");
             }
 
+            return null;
+        }
+
+        public override object VisitArray_assignment([NotNull] Array_assignmentContext context)
+        {
+            _output.Append('[');
+
+            if (context.array_elements() != null)
+            {
+                var elements = context.array_elements().expression();
+                for (int i = 0; i < elements.Length; i++)
+                {
+                    VisitExpression(elements[i]);
+
+                    if (i != elements.Length - 1)
+                    {
+                        _output.Append(',');
+                    }
+                }
+            }
+
+            _output.Append(']');
             return null;
         }
     }

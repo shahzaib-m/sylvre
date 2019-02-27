@@ -30,6 +30,21 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
             return null;
         }
+        public override object VisitAssignment_operator([NotNull] Assignment_operatorContext context)
+        {
+            if (context.EQUALSYMBOL() != null)
+                _output.Append('=');
+            else if (context.PLUSEQUALS() != null)
+                _output.Append("+=");
+            else if (context.MINUSQUALS() != null)
+                _output.Append("-=");
+            else if (context.MULTIPLYEQUALS() != null)
+                _output.Append("*=");
+            else if (context.DIVIDEEQUALS() != null)
+                _output.Append("/=");
+
+            return null;
+        }
 
         public override object VisitString([NotNull] StringContext context)
         {
