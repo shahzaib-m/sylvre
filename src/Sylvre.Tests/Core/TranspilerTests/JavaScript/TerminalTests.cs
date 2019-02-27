@@ -63,5 +63,28 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 
             StringAssert.IsMatch(jsRegex, output.TranspiledCode);
         }
+
+        [TestCase(
+            "create var = TRUE#",
+           @"""use strict"";.*true.*;")]
+        [TestCase(
+            "create var = FALSE#",
+           @"""use strict"";.*false.*;")]
+        [TestCase(
+            "create var = TRUE AND var1#",
+           @"""use strict"";.*true.*;")]
+        [TestCase(
+            "create var = var1 OR FALSE#",
+           @"""use strict"";.*false.*;")]
+        public void Should_Output_Valid_JavaScript_Boolean(string sylvreInput, string jsRegex)
+        {
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(jsRegex, output.TranspiledCode);
+        }
     }
 }

@@ -44,5 +44,19 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
             return null;
         }
+
+        public override object VisitBool([NotNull] BoolContext context)
+        {
+            if (context.TRUE() != null)
+            {
+                _output.Append("true");
+            }
+            else if (context.FALSE() != null)
+            {
+                _output.Append("false");
+            }
+
+            return null;
+        }
     }
 }
