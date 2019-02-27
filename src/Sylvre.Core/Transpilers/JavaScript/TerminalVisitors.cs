@@ -30,5 +30,19 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
             return null;
         }
+
+        public override object VisitString([NotNull] StringContext context)
+        {
+            if (context.SINGLE_STRING() != null)
+            {
+                _output.Append(context.SINGLE_STRING());
+            }
+            else if (context.DOUBLE_STRING() != null)
+            {
+                _output.Append(context.DOUBLE_STRING());
+            }
+
+            return null;
+        }
     }
 }
