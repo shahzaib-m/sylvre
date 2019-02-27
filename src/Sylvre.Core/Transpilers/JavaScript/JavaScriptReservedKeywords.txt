@@ -41,7 +41,6 @@ interface
 isFinite
 isNaN
 isPrototypeOf
-length
 let
 long
 Math
