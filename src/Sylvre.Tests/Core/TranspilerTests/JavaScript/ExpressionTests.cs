@@ -34,5 +34,59 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 
             StringAssert.IsMatch(jsRegex, output.TranspiledCode);
         }
+
+        [Test]
+        public void Should_Output_Valid_JavaScript_Unary_Increment_Prefix()
+        {
+            string sylvreInput = "increment var#";
+            string jsRegex = @"""use strict"";\+\+.*__var[n ]*;";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(jsRegex, output.TranspiledCode);
+        }
+        [Test]
+        public void Should_Output_Valid_JavaScript_Unary_Increment_Suffix()
+        {
+            string sylvreInput = "var increment#";
+            string jsRegex = @"""use strict"";__var.*\+\+[n ]*;";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(jsRegex, output.TranspiledCode);
+        }
+
+        [Test]
+        public void Should_Output_Valid_JavaScript_Unary_Decrement_Prefix()
+        {
+            string sylvreInput = "decrement var#";
+            string jsRegex = @"""use strict"";--.*__var[n ]*;";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(jsRegex, output.TranspiledCode);
+        }
+        [Test]
+        public void Should_Output_Valid_JavaScript_Unary_Decrement_Suffix()
+        {
+            string sylvreInput = "var decrement#";
+            string jsRegex = @"""use strict"";__var.*--[n ]*;";
+            SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
+            Assert.IsFalse(program.HasParseErrors);
+
+            TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
+                program, TargetLanguage.Javascript);
+
+            StringAssert.IsMatch(jsRegex, output.TranspiledCode);
+        }
     }
 }

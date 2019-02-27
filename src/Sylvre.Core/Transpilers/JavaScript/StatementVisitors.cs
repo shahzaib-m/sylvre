@@ -22,6 +22,14 @@ namespace Sylvre.Core.Transpilers.JavaScript
             {
                 VisitFunction_return(context.function_return());
             }
+            else if (context.unary_increment() != null)
+            {
+                VisitUnary_increment(context.unary_increment());
+            }
+            else if (context.unary_decrement() != null)
+            {
+                VisitUnary_decrement(context.unary_decrement());
+            }
 
             return null;
         }
@@ -86,6 +94,37 @@ namespace Sylvre.Core.Transpilers.JavaScript
             {
                 _output.Append(' ');
                 VisitConditional_expression(context.function_return_value().conditional_expression());
+            }
+
+            return null;
+        }
+
+        public override object VisitUnary_increment([NotNull] Unary_incrementContext context)
+        {
+            if (context.unary_prefix_increment() != null)
+            {
+                _output.Append("++");
+                VisitVariable_complex_reference(context.unary_prefix_increment().variable_complex_reference());
+            }
+            else if (context.unary_suffix_increment() != null)
+            {
+                VisitVariable_complex_reference(context.unary_suffix_increment().variable_complex_reference());
+                _output.Append("++");
+            }
+
+            return null;
+        }
+        public override object VisitUnary_decrement([NotNull] Unary_decrementContext context)
+        {
+            if (context.unary_prefix_decrement() != null)
+            {
+                _output.Append("--");
+                VisitVariable_complex_reference(context.unary_prefix_decrement().variable_complex_reference());
+            }
+            else if (context.unary_suffix_decrement() != null)
+            {
+                VisitVariable_complex_reference(context.unary_suffix_decrement().variable_complex_reference());
+                _output.Append("--");
             }
 
             return null;
