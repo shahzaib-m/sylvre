@@ -50,6 +50,44 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
             return null;
         }
+        public override object VisitNestable_block([NotNull] Nestable_blockContext context)
+        {
+            if (context.if_block() != null)
+            {
+                VisitIf_block(context.if_block());
+
+                if (context.elseif_block() != null)
+                {
+                    foreach (var elseifBlock in context.elseif_block())
+                    {
+                        VisitElseif_block(elseifBlock);
+                    }
+                }
+
+                if (context.else_block() != null)
+                {
+                    VisitElse_block(context.else_block());
+                }
+
+                return null;
+
+            }
+            else if (context.loopwhile_block() != null)
+            {
+                VisitLoopwhile_block(context.loopwhile_block());
+            }
+            else if (context.loopfor_block() != null)
+            {
+                VisitLoopfor_block(context.loopfor_block());
+            }
+            else if (context.statement_block() != null)
+            {
+                VisitStatement_block(context.statement_block());
+                _output.Append(';');
+            }
+
+            return null;
+        }
 
         public override object VisitFunction_block([NotNull] Function_blockContext context)
         {
@@ -186,6 +224,13 @@ namespace Sylvre.Core.Transpilers.JavaScript
             }
 
             _output.Append('}');
+
+            return null;
+        }
+
+        public override object VisitStatement_block([NotNull] Statement_blockContext context)
+        {
+            VisitStatement(context.statement());
 
             return null;
         }
