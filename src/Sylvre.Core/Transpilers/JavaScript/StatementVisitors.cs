@@ -18,6 +18,10 @@ namespace Sylvre.Core.Transpilers.JavaScript
             {
                 VisitFunction_call(context.function_call());
             }
+            else if (context.function_return() != null)
+            {
+                VisitFunction_return(context.function_return());
+            }
 
             return null;
         }
@@ -72,6 +76,18 @@ namespace Sylvre.Core.Transpilers.JavaScript
             }
 
             _output.Append(')');
+            return null;
+        }
+        public override object VisitFunction_return([NotNull] Function_returnContext context)
+        {
+            _output.Append("return");
+
+            if (context.function_return_value() != null)
+            {
+                _output.Append(' ');
+                VisitConditional_expression(context.function_return_value().conditional_expression());
+            }
+
             return null;
         }
     }
