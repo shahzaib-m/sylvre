@@ -112,9 +112,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append(')')
                    .Append('{');
 
-            foreach (var nestableBlock in context.nestable_block())
+            if (context.nestable_block() != null)
             {
-                VisitNestable_block(nestableBlock);
+                foreach (var nestableBlock in context.nestable_block())
+                {
+                    VisitNestable_block(nestableBlock);
+                }
             }
 
             _output.Append('}');
@@ -131,9 +134,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append(')')
                    .Append('{');
 
-            foreach (var nestableBlock in context.nestable_block())
+            if (context.nestable_block() != null)
             {
-                VisitNestable_block(nestableBlock);
+                foreach (var nestableBlock in context.nestable_block())
+                {
+                    VisitNestable_block(nestableBlock);
+                }
             }
 
             _output.Append('}');
@@ -149,9 +155,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append(')')
                    .Append('{');
 
-            foreach (var nestableBlock in context.nestable_block())
+            if (context.nestable_block() != null)
             {
-                VisitNestable_block(nestableBlock);
+                foreach (var nestableBlock in context.nestable_block())
+                {
+                    VisitNestable_block(nestableBlock);
+                }
             }
 
             _output.Append('}');
@@ -162,9 +171,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
         {
             _output.Append("else{");
 
-            foreach (var nestableBlock in context.nestable_block())
+            if (context.nestable_block() != null)
             {
-                VisitNestable_block(nestableBlock);
+                foreach (var nestableBlock in context.nestable_block())
+                {
+                    VisitNestable_block(nestableBlock);
+                }
             }
 
             _output.Append('}');
@@ -181,9 +193,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append(')')
                    .Append('{');
 
-            foreach (var nestableBlock in context.nestable_block())
+            if (context.nestable_block() != null)
             {
-                VisitNestable_block(nestableBlock);
+                foreach (var nestableBlock in context.nestable_block())
+                {
+                    VisitNestable_block(nestableBlock);
+                }
             }
 
             _output.Append('}');
@@ -218,9 +233,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
             _output.Append(')')
                    .Append('{');
 
-            foreach (var nestableBlock in context.nestable_block())
+            if (context.nestable_block() != null)
             {
-                VisitNestable_block(nestableBlock);
+                foreach (var nestableBlock in context.nestable_block())
+                {
+                    VisitNestable_block(nestableBlock);
+                }
             }
 
             _output.Append('}');
