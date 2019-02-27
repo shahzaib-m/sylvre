@@ -5,9 +5,8 @@
 
 lexer grammar SylvreLexer;
 
-DOUBLE_STRING       : '"'  ~('"' )* '"'  ;
-SINGLE_STRING       : '\'' ~('\'')* '\'' ;
-TEMPLATE_LITERAL    : '`'  ~('`' )* '`'  ;
+DOUBLE_STRING       : '"'  ( '\\"'  | ~["\r\n] )* '"'  ;
+SINGLE_STRING       : '\'' ( '\\\'' | ~['\r\n] )* '\'' ;
 
 HASH                : '#'   ;
 LEFT_ANGLE_BRACKET  : '<'   ;

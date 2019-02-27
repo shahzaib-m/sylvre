@@ -58,7 +58,7 @@ loopfor_block   : LOOPFOR OPEN_PARENTHESIS
                     LEFT_ANGLE_BRACKET nestable_block* RIGHT_ANGLE_BRACKET 
                 ;
 
-conditional_expression  : OPEN_PARENTHESIS conditional_expression CLOSE_PARENTHESIS                             //# parentheses_expression
+conditional_expression  : OPEN_PARENTHESIS conditional_expression CLOSE_PARENTHESIS                     //# parentheses_expression
                         | NOT conditional_expression                                                    //# not_expression
                         | left=conditional_expression comparison_operator right=conditional_expression  //# comparator_expression
                         | left=conditional_expression logical_operator    right=conditional_expression  //# binary_expression
@@ -125,11 +125,10 @@ arithmetic_operator : PLUS | MINUS | MULTIPLY | DIVIDE
 
 string  : DOUBLE_STRING
         | SINGLE_STRING
-        | TEMPLATE_LITERAL
         ; 
-
-variable_reference               : IDENTIFIER
-                                 ;
+		
+variable_reference              : IDENTIFIER
+                                ;
 variable_complex_reference      : variable_reference variable_suffix*
                                 ;
 variable_complex_reference_left : variable_reference variable_suffix_left*
