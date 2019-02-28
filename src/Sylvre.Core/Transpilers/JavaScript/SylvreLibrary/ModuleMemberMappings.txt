@@ -1,0 +1,2 @@
+﻿Console:output:log
+Console:refresh:clear

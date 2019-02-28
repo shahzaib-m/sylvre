@@ -6,10 +6,14 @@
 
   <ItemGroup>
     <None Remove="Transpilers\JavaScript\JavaScriptReservedKeywords.txt" />
+    <None Remove="Transpilers\JavaScript\SylvreLibrary\ModuleMappings.txt" />
+    <None Remove="Transpilers\JavaScript\SylvreLibrary\ModuleMemberMappings.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Transpilers\JavaScript\JavaScriptReservedKeywords.txt" />
+    <EmbeddedResource Include="Transpilers\JavaScript\SylvreLibrary\ModuleMappings.txt" />
+    <EmbeddedResource Include="Transpilers\JavaScript\SylvreLibrary\ModuleMemberMappings.txt" />
   </ItemGroup>
 
   <ItemGroup>
