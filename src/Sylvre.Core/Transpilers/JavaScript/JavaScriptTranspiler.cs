@@ -15,7 +15,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
         private StringBuilder _output = new StringBuilder();
         private List<SylvreTranspileError> _transpileErrors = new List<SylvreTranspileError>();
 
-        private readonly string _sylvreDeclarationDisallowedMessage = "'Sylvre' is a special keyword reserved for the builtin library and cannot be used as a variable name.";
+        private readonly static string _sylvreDeclarationDisallowedMessage = "'Sylvre' is a special keyword reserved for the builtin library and cannot be used as a variable name.";
 
         /// <summary>
         /// Transpile a given Sylvre program into JavaScript.
