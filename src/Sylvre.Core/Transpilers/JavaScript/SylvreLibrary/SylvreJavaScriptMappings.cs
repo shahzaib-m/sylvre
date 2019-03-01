@@ -20,7 +20,7 @@ namespace Sylvre.Core.Transpilers.JavaScript.SylvreLibrary
             new Dictionary<string, Dictionary<string, string>>();
 
         /// <summary>
-        /// Static constructor to initialise _reservedKeywords with the keywords in JavaScriptReservedKeywords.txt.
+        /// Static constructor to initialise module mappings and module member mappings from the text files.
         /// </summary>
         static SylvreJavaScriptMappings()
         {
