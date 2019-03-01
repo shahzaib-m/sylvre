@@ -70,7 +70,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
         public override object VisitAssignment([NotNull] AssignmentContext context)
         {
             // checking if 'Sylvre' is being declared and assigned to. Sylvre is a builtin library so disallowed
-            if (context.variable_complex_reference_left().GetText() == "Sylvre")
+            if (context.variable_complex_reference_left().variable_reference().GetText() == "Sylvre")
             {
                 _transpileErrors.Add(new SylvreTranspileError
                 {
