@@ -77,7 +77,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
                     CharPositionInLine = context.variable_complex_reference_left().Start.Column + 1, // Column number 1 behind, zero based index?
                     Line = context.variable_complex_reference_left().Start.Line,
                     Symbol = context.variable_complex_reference_left().Start.Text,
-                    Message = _sylvreDeclarationDisallowedMessage
+                    Message = _sylvreAssignmentDisallowedMessage
                 });
             }
 
