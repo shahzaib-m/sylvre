@@ -8,13 +8,20 @@ namespace Sylvre.Core.Transpilers.JavaScript
     {
         public override object VisitVariable_complex_reference([NotNull] Variable_complex_referenceContext context)
         {
-            VisitVariable_reference(context.variable_reference());
-
-            if (context.variable_suffix() != null)
+            if (IsSylvreLibraryReference(context))
             {
-                foreach (var suffix in context.variable_suffix())
+                HandleSylvreLibraryReference(context, false);
+            }
+            else
+            {
+                VisitVariable_reference(context.variable_reference());
+
+                if (context.variable_suffix() != null)
                 {
-                    VisitVariable_suffix(suffix);
+                    foreach (var suffix in context.variable_suffix())
+                    {
+                        VisitVariable_suffix(suffix);
+                    }
                 }
             }
 

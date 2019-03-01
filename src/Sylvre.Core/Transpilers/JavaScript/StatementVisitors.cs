@@ -98,7 +98,15 @@ namespace Sylvre.Core.Transpilers.JavaScript
 
         public override object VisitFunction_call([NotNull] Function_callContext context)
         {
-            VisitVariable_complex_reference(context.variable_complex_reference());
+            if (IsSylvreLibraryReference(context.variable_complex_reference()))
+            {
+                HandleSylvreLibraryReference(context.variable_complex_reference(), true);
+            }
+            else
+            {
+                VisitVariable_complex_reference(context.variable_complex_reference());
+            }
+
             _output.Append('(');
 
             if (context.arguments() != null)
