@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sylvre.Core", "Sylvre.Core\Sylvre.Core.csproj", "{E2A613BE-1665-40F2-8D0A-F7268DEFE854}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sylvre.Tests", "Sylvre.Tests\Sylvre.Tests.csproj", "{6964E428-2919-4A5F-8553-8E61B177E4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sylvre.Tests", "Sylvre.Tests\Sylvre.Tests.csproj", "{6964E428-2919-4A5F-8553-8E61B177E4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sylvre.WebAPI", "Sylvre.WebAPI\Sylvre.WebAPI.csproj", "{D2A13179-36E6-4FF7-A447-5503F77FF263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6964E428-2919-4A5F-8553-8E61B177E4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6964E428-2919-4A5F-8553-8E61B177E4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6964E428-2919-4A5F-8553-8E61B177E4A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A13179-36E6-4FF7-A447-5503F77FF263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A13179-36E6-4FF7-A447-5503F77FF263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A13179-36E6-4FF7-A447-5503F77FF263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A13179-36E6-4FF7-A447-5503F77FF263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
