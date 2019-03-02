@@ -84,7 +84,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                SylvreParseError firstError = result.ParseErrors.ElementAt(0);
+                SylvreParseError firstError = (SylvreParseError)result.ParseErrors.ElementAt(0);
                 Assert.IsFalse(firstError.IsMismatchedInput);
                 StringAssert.Contains("create temp num_array", firstError.Message);
                 Assert.AreEqual(32, firstError.Line);
@@ -103,7 +103,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                SylvreParseError secondError = result.ParseErrors.ElementAt(1);
+                SylvreParseError secondError = (SylvreParseError)result.ParseErrors.ElementAt(1);
                 Assert.IsTrue(secondError.IsMismatchedInput);
                 Assert.AreEqual(";", secondError.Symbol);
                 Assert.AreEqual(46, secondError.Line);
@@ -122,7 +122,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                SylvreParseError thirdError = result.ParseErrors.ElementAt(2);
+                SylvreParseError thirdError = (SylvreParseError)result.ParseErrors.ElementAt(2);
                 Assert.IsFalse(thirdError.IsMismatchedInput);
                 StringAssert.Contains("quickSort", thirdError.Message);
                 Assert.AreEqual(53, thirdError.Line);

@@ -15,7 +15,7 @@ namespace Sylvre.Core
         /// <summary>
         /// The list of all parse errors, empty if no errors encountered (successful parse).
         /// </summary>
-        public List<SylvreParseError> ParseErrors { get; private set; } = new List<SylvreParseError>();
+        public List<SylvreErrorBase> ParseErrors { get; private set; } = new List<SylvreErrorBase>();
 
         public override void SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {

@@ -14,7 +14,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
     internal partial class JavaScriptTranspiler : SylvreParserBaseVisitor<object> 
     {
         private StringBuilder _output = new StringBuilder();
-        private List<SylvreTranspileError> _transpileErrors = new List<SylvreTranspileError>();
+        private List<SylvreErrorBase> _transpileErrors = new List<SylvreErrorBase>();
 
         private readonly static string _sylvreDeclarationDisallowedMessage = "'Sylvre' is a special keyword reserved for the builtin library and cannot be used as a variable name.";
         private readonly static string _sylvreAssignmentDisallowedMessage = "'Sylvre' is a special keyword reserved for the builtin library and cannot be assigned to.";
