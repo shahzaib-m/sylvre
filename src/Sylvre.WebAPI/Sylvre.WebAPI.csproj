@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Sylvre.Core\Sylvre.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
