@@ -4,6 +4,16 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>Sylvre.Core.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+    <DocumentationFile>Sylvre.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Transpilers\JavaScript\JavaScriptReservedKeywords.txt" />
     <None Remove="Transpilers\JavaScript\SylvreLibrary\ModuleMappings.txt" />
@@ -18,6 +28,12 @@
 
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Sylvre.Core.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

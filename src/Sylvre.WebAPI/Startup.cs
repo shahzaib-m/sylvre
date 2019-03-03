@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IO;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
@@ -8,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Newtonsoft.Json;
+
+using Swashbuckle.AspNetCore.Swagger;
 
 using Sylvre.WebAPI.Models;
 
@@ -39,6 +43,22 @@ namespace Sylvre.WebAPI
                                  opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                              });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "Sylvre Web API",
+                    Version = "v1",
+                    Description = "An ASP.NET Core Web API for Sylvre.",
+                });
+
+                string coreDoc = Path.Combine(System.AppContext.BaseDirectory, "Sylvre.Core.xml");
+                c.IncludeXmlComments(coreDoc, includeControllerXmlComments: true);
+
+                string webApiDoc = Path.Combine(System.AppContext.BaseDirectory, "Sylvre.WebAPI.xml");
+                c.IncludeXmlComments(webApiDoc, includeControllerXmlComments: true);
+            });
+
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
                 opt.UseNpgsql(Configuration.GetConnectionString("SylvreWebApiDbConnection")));
         }
@@ -50,6 +70,18 @@ namespace Sylvre.WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "documentation/{documentName}/docs.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = "documentation";
+                c.DocumentTitle = "Sylvre Web API Interactive Documentation";
+                c.SwaggerEndpoint("/documentation/v1/docs.json", "Sylvre Web API V1");
+            });
 
             app.UseMvc();
         }

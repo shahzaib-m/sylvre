@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sylvre.Core", "Sylvre.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sylvre.Tests", "Sylvre.Tests\Sylvre.Tests.csproj", "{6964E428-2919-4A5F-8553-8E61B177E4A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sylvre.WebAPI", "Sylvre.WebAPI\Sylvre.WebAPI.csproj", "{D2A13179-36E6-4FF7-A447-5503F77FF263}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sylvre.WebAPI", "Sylvre.WebAPI\Sylvre.WebAPI.csproj", "{D2A13179-36E6-4FF7-A447-5503F77FF263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
