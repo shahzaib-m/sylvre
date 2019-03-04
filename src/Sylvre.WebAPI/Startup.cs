@@ -61,6 +61,8 @@ namespace Sylvre.WebAPI
 
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
                 opt.UseNpgsql(Configuration.GetConnectionString("SylvreWebApiDbConnection")));
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +85,10 @@ namespace Sylvre.WebAPI
                 c.SwaggerEndpoint("/documentation/v1/docs.json", "Sylvre Web API V1");
             });
 
+            app.UseCors(opt => 
+                opt.WithOrigins(Configuration["AllowedOrigins"])
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             app.UseMvc();
         }
     }
