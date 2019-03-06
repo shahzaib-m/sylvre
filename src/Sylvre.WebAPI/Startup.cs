@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 
 using Sylvre.WebAPI.Entities;
+using Sylvre.WebAPI.Services;
 
 namespace Sylvre.WebAPI
 {
@@ -63,6 +64,8 @@ namespace Sylvre.WebAPI
                 opt.UseNpgsql(Configuration.GetConnectionString("SylvreWebApiDbConnection")));
 
             services.AddCors();
+
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
