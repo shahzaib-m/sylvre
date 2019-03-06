@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 using Swashbuckle.AspNetCore.Swagger;
 
-using Sylvre.WebAPI.Models;
+using Sylvre.WebAPI.Entities;
 
 namespace Sylvre.WebAPI
 {

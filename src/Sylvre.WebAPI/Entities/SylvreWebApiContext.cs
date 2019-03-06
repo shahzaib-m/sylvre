@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Sylvre.WebAPI.Models
+namespace Sylvre.WebAPI.Entities
 {
     public class SylvreWebApiContext : DbContext
     {
