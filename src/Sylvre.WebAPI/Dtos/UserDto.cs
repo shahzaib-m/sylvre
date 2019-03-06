@@ -4,8 +4,6 @@ namespace Sylvre.WebAPI.Dtos
 {
     public class UserDto
     {
-        public int Id { get; set; }
-
         [MinLength(1)]
         [MaxLength(20)]
         public string Username { get; set; }

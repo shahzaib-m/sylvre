@@ -20,7 +20,5 @@ namespace Sylvre.WebAPI.Entities
                    .HasIndex(user => new { user.Username, user.Email })
                    .IsUnique(true);
         }
-
-        public DbSet<UserDto> UserDto { get; set; }
     }
 }
