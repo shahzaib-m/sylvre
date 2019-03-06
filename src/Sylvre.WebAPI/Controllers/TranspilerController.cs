@@ -23,37 +23,30 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(400)]
         public ActionResult Transpile([FromQuery] TargetLanguage target, [FromBody] TranspileRequest input)
         {
-            if (ModelState.IsValid)
+            var response = new TranspileResponse { Target = target };
+
+            var program = Parser.ParseSylvreInput(input.Code);
+            if (program.HasParseErrors)
             {
-                var response = new TranspileResponse { Target = target };
+                response.HasErrors = true;
+                response.ErrorSource = TranspileResponseErrorSource.Parser;
+                response.Errors = program.ParseErrors;
 
-                var program = Parser.ParseSylvreInput(input.Code);
-                if (program.HasParseErrors)
-                {
-                    response.HasErrors = true;
-                    response.ErrorSource = TranspileResponseErrorSource.Parser;
-                    response.Errors = program.ParseErrors;
-
-                    return Ok(response);
-                }
-
-                var output = Transpiler.TranspileSylvreToTarget(program, target);
-                if (output.HasTranspileErrors)
-                {
-                    response.HasErrors = true;
-                    response.ErrorSource = TranspileResponseErrorSource.Transpiler;
-                    response.Errors = output.TranspileErrors;
-
-                    return Ok(response);
-                }
-
-                response.TranspiledCode = output.TranspiledCode;
                 return Ok(response);
             }
-            else
+
+            var output = Transpiler.TranspileSylvreToTarget(program, target);
+            if (output.HasTranspileErrors)
             {
-                return BadRequest();
+                response.HasErrors = true;
+                response.ErrorSource = TranspileResponseErrorSource.Transpiler;
+                response.Errors = output.TranspileErrors;
+
+                return Ok(response);
             }
+
+            response.TranspiledCode = output.TranspiledCode;
+            return Ok(response);
         }
     }
 }
