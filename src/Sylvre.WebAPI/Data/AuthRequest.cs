@@ -2,7 +2,7 @@
 
 namespace Sylvre.WebAPI.Data
 {
-    public class UserAuthRequest
+    public class AuthRequest
     {
         [Required]
         public string Username { get; set; }

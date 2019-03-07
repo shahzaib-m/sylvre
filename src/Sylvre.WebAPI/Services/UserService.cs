@@ -1,10 +1,9 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 using Microsoft.EntityFrameworkCore;
 
+using Sylvre.WebAPI.Utils;
 using Sylvre.WebAPI.Entities;
 using Sylvre.WebAPI.Services.Exceptions;
 
@@ -20,8 +19,6 @@ namespace Sylvre.WebAPI.Services
         Task<List<User>> RetrieveAllAsync();
         Task UpdateAsync(User updatedUser, User userToUpdate, string password = null);
         Task DeleteAsync(User userToDelete);
-
-        Task<User> AuthenticateAsync(string username, string password);
     }
 
     public class UserService : IUserService
@@ -63,7 +60,7 @@ namespace Sylvre.WebAPI.Services
                 throw new UserServiceException($"Email '{newUser.Email}' is taken");
 
             // generate hash and salt from the given password
-            GenerateHashAndSaltFromString(password, out byte[] hash, out byte[] salt);
+            HashUtils.GenerateHashAndSaltFromString(password, out byte[] hash, out byte[] salt);
             newUser.PasswordHash = hash;
             newUser.PasswordSalt = salt;
 
@@ -132,7 +129,7 @@ namespace Sylvre.WebAPI.Services
             // update if new password is sent
             if (!string.IsNullOrWhiteSpace(password))
             {
-                GenerateHashAndSaltFromString(password, out byte[] hash, out byte[] salt);
+                HashUtils.GenerateHashAndSaltFromString(password, out byte[] hash, out byte[] salt);
                 userToUpdate.PasswordHash = hash;
                 userToUpdate.PasswordSalt = salt;
             }
@@ -150,70 +147,6 @@ namespace Sylvre.WebAPI.Services
             // delete user
             _context.Users.Remove(userToDelete);
             await _context.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// Authenticates a user with the given username and password.
-        /// </summary>
-        /// <param name="username">The username to authenticate.</param>
-        /// <param name="password">The password to authenticate.</param>
-        /// <returns>The authenticated user if authenticated, null otherwise.</returns>
-        public async Task<User> AuthenticateAsync(string username, string password)
-        {
-            // if username and/or password is empty, return null (auth denied)
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                return null;
-
-            // find the User by the given username
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
-
-            // if username doesn't exist, return null (auth denied)
-            if (user == null)
-                return null;
-
-            // check the given password against the stored hash and salt, return null if failed (auth denied)
-            if (!IsStringValidAgainstHashAndSalt(password, user.PasswordHash, user.PasswordSalt))
-                return null;
-
-            return user;
-        }
-
-        /// <summary>
-        /// Generates a hash and salt from a given string.
-        /// </summary>
-        /// <param name="str">The string to hash and salt.</param>
-        /// <param name="hash">The out variable to set hash to.</param>
-        /// <param name="salt">The out variable to set the salt to.</param>
-        private static void GenerateHashAndSaltFromString(string str, 
-            out byte[] hash, out byte[] salt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                salt = hmac.Key;
-                hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(str));
-            }
-        }
-        /// <summary>
-        /// Checks if a string is valid against a given hash and salt.
-        /// </summary>
-        /// <param name="str">The string to check.</param>
-        /// <param name="hashToCheck">The hash to check against.</param>
-        /// <param name="salt">The salt to use.</param>
-        /// <returns>True if valid, false otherwise.</returns>
-        private static bool IsStringValidAgainstHashAndSalt(string str,
-            byte[] hashToCheck, byte[] salt)
-        {
-            using (var hmac = new HMACSHA512(salt))
-            {
-                var hmacComputedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(str));
-                for (int i = 0; i < hmacComputedHash.Length; i++)
-                {
-                    if (hmacComputedHash[i] != hashToCheck[i])
-                        return false;
-                }
-
-                return true;
-            }
         }
     }
 }

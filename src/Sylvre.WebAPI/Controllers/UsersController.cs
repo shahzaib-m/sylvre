@@ -47,7 +47,7 @@ namespace Sylvre.WebAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
 
-            return CreatedAtAction("PostUser", new { id = createdUserEntity.Id },
+            return CreatedAtAction("Register", new { id = createdUserEntity.Id },
                 GetUserResponseDtoFromUserEntity(createdUserEntity));
         }
 
@@ -150,36 +150,6 @@ namespace Sylvre.WebAPI.Controllers
 
             return NoContent();
         }
-
-
-        /// <summary>
-        /// Authenticates a user with the given credentials.
-        /// </summary>
-        /// <param name="credentials">The username and password to authenticate.</param>
-        /// <response code="200">Authentication successful and user info and token returned.</response>
-        /// <response code="401">Unauthorized as credentials were invalid.</response>
-        /// <returns>The user details and the authentication token.</returns>
-        [HttpPost("authenticate")]
-        [ProducesResponseType(typeof(UserAuthResponse), 200)]
-        [ProducesResponseType(401)]
-        public async Task<ActionResult> Authenticate([FromBody] UserAuthRequest credentials)
-        {
-            var authenticatedUser = await _userService.AuthenticateAsync(
-                credentials.Username, credentials.Password);
-
-            if (authenticatedUser == null)
-                return Unauthorized(new { Message = "Unauthorized" });
-
-            return Ok(new UserAuthResponse
-            {
-                Id = authenticatedUser.Id,
-                Username = authenticatedUser.Username,
-                Email = authenticatedUser.Email,
-                FullName = authenticatedUser.FullName,
-                Token = "Should be a JWT token"
-            });
-        }
-
 
         private User GetUserEntityFromUserDto(UserDto userDto)
         {
