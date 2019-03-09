@@ -9,6 +9,8 @@ namespace Sylvre.WebAPI.Entities
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         /// <summary>
         /// Sets the unique columns in the tables.
         /// https://stackoverflow.com/questions/41246614/entity-framework-core-add-unique-constraint-code-first

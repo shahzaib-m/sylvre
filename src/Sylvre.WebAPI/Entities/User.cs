@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sylvre.WebAPI.Entities
 {
@@ -26,5 +27,7 @@ namespace Sylvre.WebAPI.Entities
 
         [Required]
         public byte[] PasswordSalt { get; set; }
+
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }
