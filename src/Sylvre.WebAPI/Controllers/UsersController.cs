@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Sylvre.WebAPI.Data;
 using Sylvre.WebAPI.Dtos;
 using Sylvre.WebAPI.Entities;
 
@@ -9,11 +9,13 @@ using Sylvre.WebAPI.Services;
 using Sylvre.WebAPI.Services.Exceptions;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sylvre.WebAPI.Controllers
 {
     [Route("users")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin, User")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -33,6 +35,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(UserResponseDto), 201)]
         [ProducesResponseType(400)]
+        [AllowAnonymous]
         public async Task<ActionResult<UserResponseDto>> Register([FromBody] UserDto newUser)
         {
             var newUserEntity = GetUserEntityFromUserDto(newUser);
@@ -63,6 +66,13 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<UserResponseDto>> GetUserById([FromRoute] int id)
         {
+            // if client is not an admin, they can only query themselves
+            if (!User.Claims.Any(claim => claim.Value == "Admin")
+                    && User.Identity.Name != id.ToString())
+            {
+                return Forbid("AccessToken");
+            }
+
             var userEntity = await _userService.RetrieveAsync(id);
 
             if (userEntity == null)
@@ -80,6 +90,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <returns>A list of all users.</returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<UserResponseDto>), 200)]
+        [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin")] // admin only action
         public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetAllUsers()
         {
             IEnumerable<User> userEntities = await _userService.RetrieveAllAsync();
@@ -108,6 +119,13 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateUser([FromRoute]int id, [FromBody] UserDto updatedUser)
         {
+            // if client is not an admin, they can only update themselves
+            if (!User.Claims.Any(claim => claim.Value == "Admin")
+                    && User.Identity.Name != id.ToString())
+            {
+                return Forbid("AccessToken");
+            }
+
             var userToUpdateEntity = await _userService.RetrieveAsync(id);
             if (userToUpdateEntity == null)
             {
@@ -140,6 +158,13 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<UserResponseDto>> DeleteUser([FromRoute] int id)
         {
+            // if client is not an admin, they can only delete themselves
+            if (!User.Claims.Any(claim => claim.Value == "Admin")
+                    && User.Identity.Name != id.ToString())
+            {
+                return Forbid("AccessToken");
+            }
+
             var userToDeleteEntity = await _userService.RetrieveAsync(id);
             if (userToDeleteEntity == null)
             {
