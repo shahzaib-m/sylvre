@@ -95,17 +95,17 @@ namespace Sylvre.WebAPI
 
                         return Task.CompletedTask;
                     },
-                    OnTokenValidated = context =>
+                    OnTokenValidated = async context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         var userId = int.Parse(context.Principal.Identity.Name);
-                        var userEntity = userService.RetrieveAsync(userId);
+                        var userEntity = await userService.RetrieveAsync(userId);
                         if (userEntity == null)
                         {
                             context.Fail("Unauthorized");
                         }
 
-                        return Task.CompletedTask;
+                        return;
                     }
                 };
                 options.RequireHttpsMetadata = false;
@@ -133,11 +133,11 @@ namespace Sylvre.WebAPI
 
                             return Task.CompletedTask;
                         },
-                        OnTokenValidated = context =>
+                        OnTokenValidated = async context =>
                         {
                             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                             var userId = int.Parse(context.Principal.Identity.Name);
-                            var userEntity = userService.RetrieveAsync(userId);
+                            var userEntity = await userService.RetrieveAsync(userId);
                             if (userEntity == null)
                             {
                                 context.Fail("Unauthorized");
@@ -154,7 +154,7 @@ namespace Sylvre.WebAPI
                                 }
                             }
 
-                            return Task.CompletedTask;
+                            return;
                         }
                     };
                     options.RequireHttpsMetadata = false;
