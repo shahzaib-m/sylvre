@@ -60,6 +60,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
         /// Handles the variable_complex_reference if it is a Sylvre library reference.
         /// </summary>
         /// <param name="context">The variable_complex_reference to handle.</param>
+        /// <param name="isFunctionCall">Whether the Sylvre library reference is a function call or not.</param>
         private void HandleSylvreLibraryReference(Variable_complex_referenceContext context, bool isFunctionCall)
         {
             var suffixes = context.variable_suffix();

@@ -31,16 +31,16 @@ namespace Sylvre.WebAPI.Controllers
         /// <summary>
         /// Creates a new Sylvre block under the authenticated user.
         /// </summary>
-        /// <param name="sylvreBlockDto">The SylvreBlock to create.</param>
+        /// <param name="newSylvreBlock">The SylvreBlock to create.</param>
         /// <response code="201">Successfully created the SylvreBlock under the authenticated user.</response>
         /// <returns>The SylvreBlock that was created.</returns>
         [HttpPost]
         [ProducesResponseType(typeof(SylvreBlockResponseDto), 201)]
-        public async Task<ActionResult<SylvreBlock>> CreateSylvreBlock(SylvreBlockDto sylvreBlockDto)
+        public async Task<ActionResult<SylvreBlock>> CreateSylvreBlock(SylvreBlockDto newSylvreBlock)
         {
             int userId = int.Parse(User.Identity.Name);
 
-            var entity = GetSylvreBlockEntityFromDto(sylvreBlockDto, userId);
+            var entity = GetSylvreBlockEntityFromDto(newSylvreBlock, userId);
             _context.SylvreBlocks.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -107,7 +107,7 @@ namespace Sylvre.WebAPI.Controllers
         /// Updates a Sylvre block by id.
         /// </summary>
         /// <param name="id">The id of the SylvreBlock to update.</param>
-        /// <param name="sylvreBlockDto">The updated SylvreBlock.</param>
+        /// <param name="updatedSylvreBlock">The updated SylvreBlock.</param>
         /// <response code="204">Successfully updated the SylvreBlock by id.</response>
         /// <response code="403">Unauthorized to update this block as it does not belong to the authenticated user.</response>
         /// <response code="404">SylvreBlock with the given id was not found.</response>
@@ -116,7 +116,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateSylvreBlock(int id, SylvreBlockDto sylvreBlockDto)
+        public async Task<IActionResult> UpdateSylvreBlock(int id, SylvreBlockDto updatedSylvreBlock)
         {
             var entity = await _context.SylvreBlocks.FindAsync(id);
             if (entity == null)
@@ -133,11 +133,11 @@ namespace Sylvre.WebAPI.Controllers
 
             _context.SylvreBlocks.Attach(entity);
 
-            if (!string.IsNullOrWhiteSpace(sylvreBlockDto.Name))
-                entity.Name = sylvreBlockDto.Name;
+            if (!string.IsNullOrWhiteSpace(updatedSylvreBlock.Name))
+                entity.Name = updatedSylvreBlock.Name;
 
-            if (!string.IsNullOrWhiteSpace(sylvreBlockDto.Body))
-                entity.Body = sylvreBlockDto.Body;
+            if (!string.IsNullOrWhiteSpace(updatedSylvreBlock.Body))
+                entity.Body = updatedSylvreBlock.Body;
 
             _context.SylvreBlocks.Update(entity);
             await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using Sylvre.Core;
 
@@ -21,6 +22,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpPost(Name = "transpiler")]
         [ProducesResponseType(typeof(TranspileResponse), 200)]
         [ProducesResponseType(400)]
+        [AllowAnonymous]
         public ActionResult Transpile([FromQuery] TargetLanguage target, [FromBody] TranspileRequest input)
         {
             var response = new TranspileResponse { Target = target };

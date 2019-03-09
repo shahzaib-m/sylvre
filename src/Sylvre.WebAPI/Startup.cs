@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -18,10 +19,9 @@ using Newtonsoft.Json;
 
 using Swashbuckle.AspNetCore.Swagger;
 
+using Sylvre.WebAPI.Swagger;
 using Sylvre.WebAPI.Entities;
 using Sylvre.WebAPI.Services;
-using System.Security.Claims;
-using System.Collections.Generic;
 
 namespace Sylvre.WebAPI
 {
@@ -65,6 +65,8 @@ namespace Sylvre.WebAPI
 
                 string webApiDoc = Path.Combine(System.AppContext.BaseDirectory, "Sylvre.WebAPI.xml");
                 c.IncludeXmlComments(webApiDoc, includeControllerXmlComments: true);
+
+                c.OperationFilter<AuthHeaderFilter>();
             });
 
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
@@ -191,7 +193,7 @@ namespace Sylvre.WebAPI
                 c.SwaggerEndpoint("/documentation/v1/docs.json", "Sylvre Web API V1");
             });
 
-            app.UseCors(opt => 
+            app.UseCors(opt =>
                 opt.WithOrigins(Configuration["AllowedOrigins"])
                     .AllowAnyMethod()
                     .AllowAnyHeader());
