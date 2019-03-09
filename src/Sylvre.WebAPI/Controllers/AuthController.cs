@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.Net.Http.Headers;
@@ -40,14 +41,16 @@ namespace Sylvre.WebAPI.Controllers
         /// Authenticates a user with the given credentials.
         /// </summary>
         /// <param name="credentials">The username and password to authenticate.</param>
-        /// <response code="200">Authentication successful and user id, access token, and refresh token returned.</response>
+        /// <param name="strategy">The authentication strategy to use (default is token).</param>
+        /// <response code="200">Authentication successful and user id, access token, and refresh token returned using the given strategy.</response>
         /// <response code="401">Unauthorized as credentials were invalid.</response>
         /// <returns>The user id, access token, and refresh token.</returns>
         [HttpPost("login")]
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
         [AllowAnonymous]
-        public async Task<ActionResult> Login([FromBody] AuthRequest credentials)
+        public async Task<ActionResult> Login([FromQuery] AuthStrategy strategy,
+            [FromBody] AuthRequest credentials)
         {
             var authenticatedUser = await _authService.AuthenticateAsync(
                 credentials.Username, credentials.Password);
@@ -65,25 +68,48 @@ namespace Sylvre.WebAPI.Controllers
             await _authService.CreateRefreshTokenUnderUserByIdAsync(refreshToken.RawSignature,
                 authenticatedUser.Id, ipAddress, userAgent);
 
-
-            return Ok(new AuthResponse
+            if (strategy == AuthStrategy.Token)
             {
-                UserId = authenticatedUser.Id,
-                AccessToken = WriteJwtSecurityTokenToString(accessToken),
-                RefreshToken = WriteJwtSecurityTokenToString(refreshToken)
-            });
+                return Ok(new AuthResponse
+                {
+                    UserId = authenticatedUser.Id,
+                    AccessToken = WriteJwtSecurityTokenToString(accessToken),
+                    RefreshToken = WriteJwtSecurityTokenToString(refreshToken)
+                });
+            }
+            else
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    Path = "/",
+                    HttpOnly = true,
+                    Secure = true,
+                    IsEssential = true
+                };
+
+                Response.Cookies.Append("access-token", WriteJwtSecurityTokenToString(accessToken),
+                    cookieOptions);
+                Response.Cookies.Append("refresh-token", WriteJwtSecurityTokenToString(refreshToken),
+                    cookieOptions);
+
+                return Ok(new AuthResponse
+                {
+                    UserId = authenticatedUser.Id,
+                });
+            }
         }
 
         /// <summary>
         /// Generates a new access token and refresh token, deleting the old refresh token.
         /// </summary>
+        /// /// <param name="strategy">The authentication strategy to use (default is token).</param>
         /// <response code="200">Authentication successful and user id, access token, and refresh token returned.</response>
         /// <response code="401">Unauthorized as refresh token was invalid.</response>
         /// <returns>The user id, access token, and refresh token.</returns>
         [HttpGet("refresh")]
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult> Refresh()
+        public async Task<ActionResult> Refresh([FromQuery] AuthStrategy strategy)
         {
             int userId = int.Parse(User.Identity.Name);
             User user = await _userService.RetrieveAsync(userId);
@@ -111,12 +137,35 @@ namespace Sylvre.WebAPI.Controllers
                 user.Id, ipAddress, userAgent);
 
             
-            return Ok(new AuthResponse
+            if (strategy == AuthStrategy.Token)
             {
-                UserId = user.Id,
-                AccessToken = WriteJwtSecurityTokenToString(accessToken),
-                RefreshToken = WriteJwtSecurityTokenToString(refreshToken)
-            });
+                return Ok(new AuthResponse
+                {
+                    UserId = user.Id,
+                    AccessToken = WriteJwtSecurityTokenToString(accessToken),
+                    RefreshToken = WriteJwtSecurityTokenToString(refreshToken)
+                });
+            }
+            else
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    Path = "/",
+                    HttpOnly = true,
+                    Secure = true,
+                    IsEssential = true
+                };
+
+                Response.Cookies.Append("access-token", WriteJwtSecurityTokenToString(accessToken),
+                    cookieOptions);
+                Response.Cookies.Append("refresh-token", WriteJwtSecurityTokenToString(refreshToken),
+                    cookieOptions);
+
+                return Ok(new AuthResponse
+                {
+                    UserId = user.Id,
+                });
+            }
         }
 
         /// <summary>

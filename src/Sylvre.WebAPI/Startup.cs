@@ -87,6 +87,14 @@ namespace Sylvre.WebAPI
             {
                 options.Events = new JwtBearerEvents
                 {
+                    OnMessageReceived = context =>
+                    {
+                        // if the user is authenticating via a cookie (browsers/web-apps), use that token
+                        if (context.Request.Cookies.ContainsKey("access-token"))
+                            context.Token = context.Request.Cookies["access-token"];
+
+                        return Task.CompletedTask;
+                    },
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
@@ -117,6 +125,14 @@ namespace Sylvre.WebAPI
                 {
                     options.Events = new JwtBearerEvents
                     {
+                        OnMessageReceived = context =>
+                        {
+                            // if the user is authenticating via a cookie (browsers/web-apps), use that token
+                            if (context.Request.Cookies.ContainsKey("refresh-token"))
+                                context.Token = context.Request.Cookies["refresh-token"];
+
+                            return Task.CompletedTask;
+                        },
                         OnTokenValidated = context =>
                         {
                             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
