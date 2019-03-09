@@ -29,5 +29,7 @@ namespace Sylvre.WebAPI.Entities
         public byte[] PasswordSalt { get; set; }
 
         public ICollection<RefreshToken> RefreshTokens { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

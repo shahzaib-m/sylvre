@@ -64,6 +64,9 @@ namespace Sylvre.WebAPI.Services
             newUser.PasswordHash = hash;
             newUser.PasswordSalt = salt;
 
+            // standard user by default
+            newUser.IsAdmin = false;
+
             // add and save new user
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();

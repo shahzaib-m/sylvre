@@ -167,7 +167,8 @@ namespace Sylvre.WebAPI.Controllers
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                FullName = user.FullName
+                FullName = user.FullName,
+                IsAdmin = user.IsAdmin
             };
         }
     }
