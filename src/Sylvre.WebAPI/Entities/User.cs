@@ -30,6 +30,8 @@ namespace Sylvre.WebAPI.Entities
 
         public ICollection<RefreshToken> RefreshTokens { get; set; }
 
+        public ICollection<SylvreBlock> SylvreBlocks { get; set; }
+
         public bool IsAdmin { get; set; }
     }
 }
