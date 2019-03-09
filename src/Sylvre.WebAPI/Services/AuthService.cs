@@ -10,6 +10,11 @@ namespace Sylvre.WebAPI.Services
     public interface IAuthService
     {
         Task<User> AuthenticateAsync(string username, string password);
+        Task<RefreshToken> GetRefreshTokenOfUserBySignatureAsync(string signature,
+            int userId);
+        Task CreateRefreshTokenUnderUserByIdAsync(string signature, int userId,
+            string ipAddress, string userAgent);
+        Task DeleteRefreshTokenAsync(RefreshToken token);
     }
 
     public class AuthService : IAuthService
@@ -46,6 +51,42 @@ namespace Sylvre.WebAPI.Services
                 return null;
 
             return user;
+        }
+
+        /// <summary>
+        /// Retrieves a refresh token by its JWT signature of a specific user by their id.
+        /// </summary>
+        /// <param name="signature">The signature of the JWT refresh token.</param>
+        /// <param name="userId">The id of the user the token belongs to.</param>
+        /// <returns>The refresh token is found, null otherwise.</returns>
+        public Task<RefreshToken> GetRefreshTokenOfUserBySignatureAsync(string signature, int userId)
+        {
+            return _context.RefreshTokens.SingleOrDefaultAsync(x => x.Signature == signature &&
+                x.UserId == userId);
+        }
+
+        public async Task CreateRefreshTokenUnderUserByIdAsync(string signature, int userId,
+            string ipAddress, string userAgent)
+        {
+            var refreshToken = new RefreshToken
+            {
+                Signature = signature,
+                IsExpired = false,
+                IpAddress = ipAddress,
+                UserAgent = userAgent,
+                UserId = userId
+            };
+
+            _context.RefreshTokens.Add(refreshToken);
+            await _context.SaveChangesAsync();
+
+            return;
+        }
+
+        public Task DeleteRefreshTokenAsync(RefreshToken token)
+        {
+            _context.Remove(token);
+            return _context.SaveChangesAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
@@ -19,6 +20,8 @@ using Swashbuckle.AspNetCore.Swagger;
 
 using Sylvre.WebAPI.Entities;
 using Sylvre.WebAPI.Services;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace Sylvre.WebAPI
 {
@@ -71,6 +74,85 @@ namespace Sylvre.WebAPI
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer("AccessToken", options =>
+            {
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userId = int.Parse(context.Principal.Identity.Name);
+                        var userEntity = userService.RetrieveAsync(userId);
+                        if (userEntity == null)
+                        {
+                            context.Fail("Unauthorized");
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidIssuer = "sylvre-webapi",
+                    ValidAudience = "sylvre-webapi-client-access-token"
+                };
+            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer("RefreshToken", options =>
+                {
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            var userId = int.Parse(context.Principal.Identity.Name);
+                            var userEntity = userService.RetrieveAsync(userId);
+                            if (userEntity == null)
+                            {
+                                context.Fail("Unauthorized");
+                            }
+
+                            // adding the raw signature of the refresh token for use in the /auth/refresh action
+                            var refreshToken = context.SecurityToken as JwtSecurityToken;
+                            if (refreshToken != null)
+                            {
+                                ClaimsIdentity identity = context.Principal.Identity as ClaimsIdentity;
+                                if (identity != null)
+                                {
+                                    identity.AddClaim(new Claim("refresh-token-signature", refreshToken.RawSignature));
+                                }
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidateAudience = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidIssuer = "sylvre-webapi",
+                        ValidAudience = "sylvre-webapi-client-refresh-token"
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +179,9 @@ namespace Sylvre.WebAPI
                 opt.WithOrigins(Configuration["AllowedOrigins"])
                     .AllowAnyMethod()
                     .AllowAnyHeader());
+
+            app.UseAuthentication();
+
             app.UseMvc();
         }
     }
