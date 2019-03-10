@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  webapi:
+    container_name: sylvre-webapi
+    image: shahzaibm/sylvre-webapi:latest
+    hostname: sylvre-webapi
+    environment:
+      APPSETTINGS__SECRET: ${SYLVREWEBAPI_SECRET}
+      CONNECTIONSTRINGS__SYLVREWEBAPIDBCONNECTION: "User ID=sylvre-webapi;Password=password;Server=sylvre-webapi-db;Port=5432;Database=sylvre-webapi;Integrated Security=true;Pooling=true;"
+      VIRTUAL_HOST: ${SYLVREWEBAPI_VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${SYLVREWEBAPI_LETSENCRYPT_HOST}
+      LETSENCRYPT_EMAIL: ${SYLVREWEBAPI_LETSENCRYPT_EMAIL}
+    expose:
+      - "80"
+    depends_on:
+      - "db"
+    restart: unless-stopped
+
+  db:
+    container_name: sylvre-webapi-db
+    image: postgres
+    hostname: sylvre-webapi-db
+    environment:
+      POSTGRES_USER: "sylvre-webapi"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "sylvre-webapi"
+    restart: unless-stopped

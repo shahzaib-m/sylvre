@@ -205,7 +205,7 @@ namespace Sylvre.WebAPI
             });
 
             app.UseCors(opt =>
-                opt.WithOrigins(Configuration["AllowedOrigins"])
+                 opt.WithOrigins("*")
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 
