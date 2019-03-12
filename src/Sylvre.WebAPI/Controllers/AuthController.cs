@@ -98,7 +98,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="200">Authentication successful and user id, access token, and refresh token returned.</response>
         /// <response code="401">Unauthorized as refresh token was invalid.</response>
         /// <returns>The user id, access token, and refresh token.</returns>
-        [HttpGet("refresh")]
+        [HttpPost("refresh")]
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
         public async Task<ActionResult> Refresh([FromQuery] AuthStrategy strategy)
@@ -158,7 +158,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="204">Authentication successful and refresh token deleted.</response>
         /// <response code="401">Unauthorized as refresh token was invalid.</response>
         /// <returns>204 No Content response.</returns>
-        [HttpGet("logout")]
+        [HttpDelete("logout")]
         [ProducesResponseType(204)]
         [ProducesResponseType(401)]
         public async Task<ActionResult> Logout()
