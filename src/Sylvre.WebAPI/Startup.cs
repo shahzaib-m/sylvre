@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
+using Microsoft.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -91,6 +93,21 @@ namespace Sylvre.WebAPI
             {
                 options.Events = new JwtBearerEvents
                 {
+                    // custom response for missing token/cookie instead of empty response body
+                    // https://stackoverflow.com/questions/38281116/custom-401-and-403-response-model-with-usejwtbearerauthentication-middleware
+                    OnChallenge = async context =>
+                    {
+                        context.Response.StatusCode = 401;
+                        context.Response.Headers.Append(HeaderNames.WWWAuthenticate,
+                            context.Options.Challenge);
+
+                        context.Response.Headers.Append(HeaderNames.ContentType,
+                            "application/json");
+
+                        await context.Response.WriteAsync("{ \"message\": \"Unauthorized\" }");
+
+                        context.HandleResponse();
+                    },
                     OnMessageReceived = context =>
                     {
                         // if the user is authenticating via a cookie (browsers/web-apps), use that token
@@ -129,6 +146,21 @@ namespace Sylvre.WebAPI
                 {
                     options.Events = new JwtBearerEvents
                     {
+                        // custom response for missing token/cookie instead of empty response body
+                        // https://stackoverflow.com/questions/38281116/custom-401-and-403-response-model-with-usejwtbearerauthentication-middleware
+                        OnChallenge = async context =>
+                        {
+                            context.Response.StatusCode = 401;
+                            context.Response.Headers.Append(HeaderNames.WWWAuthenticate,
+                                context.Options.Challenge);
+
+                            context.Response.Headers.Append(HeaderNames.ContentType,
+                                "application/json");
+
+                            await context.Response.WriteAsync("{ \"message\": \"Unauthorized\" }");
+
+                            context.HandleResponse();
+                        },
                         OnMessageReceived = context =>
                         {
                             // if the user is authenticating via a cookie (browsers/web-apps), use that token
