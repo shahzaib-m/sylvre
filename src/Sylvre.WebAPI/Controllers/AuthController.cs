@@ -79,18 +79,10 @@ namespace Sylvre.WebAPI.Controllers
             }
             else
             {
-                var cookieOptions = new CookieOptions
-                {
-                    Path = "/",
-                    HttpOnly = true,
-                    Secure = true,
-                    IsEssential = true
-                };
-
                 Response.Cookies.Append("access-token", WriteJwtSecurityTokenToString(accessToken),
-                    cookieOptions);
+                    GenerateCookieOptions(JwtTokenType.AccessToken, isCookieDelete: false));
                 Response.Cookies.Append("refresh-token", WriteJwtSecurityTokenToString(refreshToken),
-                    cookieOptions);
+                    GenerateCookieOptions(JwtTokenType.RefreshToken, isCookieDelete: false));
 
                 return Ok(new AuthResponse
                 {
@@ -102,7 +94,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <summary>
         /// Generates a new access token and refresh token, deleting the old refresh token.
         /// </summary>
-        /// /// <param name="strategy">The authentication strategy to use (default is token).</param>
+        /// <param name="strategy">The authentication strategy to use (default is token).</param>
         /// <response code="200">Authentication successful and user id, access token, and refresh token returned.</response>
         /// <response code="401">Unauthorized as refresh token was invalid.</response>
         /// <returns>The user id, access token, and refresh token.</returns>
@@ -148,18 +140,10 @@ namespace Sylvre.WebAPI.Controllers
             }
             else
             {
-                var cookieOptions = new CookieOptions
-                {
-                    Path = "/",
-                    HttpOnly = true,
-                    Secure = true,
-                    IsEssential = true
-                };
-
                 Response.Cookies.Append("access-token", WriteJwtSecurityTokenToString(accessToken),
-                    cookieOptions);
+                    GenerateCookieOptions(JwtTokenType.AccessToken, isCookieDelete: false));
                 Response.Cookies.Append("refresh-token", WriteJwtSecurityTokenToString(refreshToken),
-                    cookieOptions);
+                    GenerateCookieOptions(JwtTokenType.RefreshToken, isCookieDelete: false));
 
                 return Ok(new AuthResponse
                 {
@@ -192,6 +176,12 @@ namespace Sylvre.WebAPI.Controllers
             }
 
             await _authService.DeleteRefreshTokenAsync(userRefreshToken);
+
+            Response.Cookies.Delete("access-token", GenerateCookieOptions(
+                JwtTokenType.AccessToken, isCookieDelete: true));
+            Response.Cookies.Delete("refresh-token", GenerateCookieOptions(
+                JwtTokenType.RefreshToken, isCookieDelete: true));
+
             return NoContent();
         }
 
@@ -245,6 +235,33 @@ namespace Sylvre.WebAPI.Controllers
         private string WriteJwtSecurityTokenToString(JwtSecurityToken token)
         {
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        /// <summary>
+        /// Builds the cookie options for the specified token type.
+        /// </summary>
+        /// <param name="tokenType">The type of the JWT token to generate the cookie options for.</param>
+        /// <param name="isCookieDelete">Whether the cookie is being deleted or not.</param>
+        /// <returns>The generated cookie options.</returns>
+        private CookieOptions GenerateCookieOptions(JwtTokenType tokenType, bool isCookieDelete)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                Path = "/",
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                Domain = _appSettings.CookieDomain,
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax
+            };
+
+            if (!isCookieDelete)
+            {
+                cookieOptions.Expires = tokenType == JwtTokenType.AccessToken ? DateTime.UtcNow.AddMinutes(15)
+                    : DateTime.UtcNow.AddDays(14);
+            }
+
+            return cookieOptions;
         }
     }
 }

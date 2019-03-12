@@ -236,10 +236,12 @@ namespace Sylvre.WebAPI
                 c.SwaggerEndpoint("/documentation/v1/docs.json", "Sylvre Web API V1");
             });
 
+            string corsOrigin = Configuration.GetSection("AppSettings").Get<AppSettings>().CorsOrigin;
             app.UseCors(opt =>
-                 opt.WithOrigins("*")
+                 opt.WithOrigins(corsOrigin)
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .AllowCredentials());
 
             // use forwarded headers from reverse proxies, accept from all private IP addresses and known exact proxies
             var forwardedHeadersOpts = new ForwardedHeadersOptions

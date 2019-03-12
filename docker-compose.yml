@@ -8,6 +8,8 @@ services:
     hostname: sylvre-webapi
     environment:
       APPSETTINGS__SECRET: ${SYLVREWEBAPI_SECRET}
+      APPSETTINGS__CORSORIGIN: ${SYLVREWEBAPI_CORSORIGIN}
+      APPSETTINGS__COOKIEDOMAIN: ${SYLVREWEBAPI_COOKIEDOMAIN}
       CONNECTIONSTRINGS__SYLVREWEBAPIDBCONNECTION: "User ID=sylvre-webapi;Password=password;Server=sylvre-webapi-db;Port=5432;Database=sylvre-webapi;Integrated Security=true;Pooling=true;"
       VIRTUAL_HOST: ${SYLVREWEBAPI_VIRTUAL_HOST}
       LETSENCRYPT_HOST: ${SYLVREWEBAPI_LETSENCRYPT_HOST}
