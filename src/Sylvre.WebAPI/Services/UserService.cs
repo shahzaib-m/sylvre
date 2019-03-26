@@ -19,6 +19,9 @@ namespace Sylvre.WebAPI.Services
         Task<List<User>> RetrieveAllAsync();
         Task UpdateAsync(User updatedUser, User userToUpdate, string password = null);
         Task DeleteAsync(User userToDelete);
+
+        Task<bool> IsUsernameTaken(string username);
+        Task<bool> IsEmailTaken(string email);
     }
 
     public class UserService : IUserService
@@ -150,6 +153,27 @@ namespace Sylvre.WebAPI.Services
             // delete user
             _context.Users.Remove(userToDelete);
             await _context.SaveChangesAsync();
+        }
+
+
+        /// <summary>
+        /// Checks whether a username is taken by an existing user. 
+        /// </summary>
+        /// <param name="username">The username to check.</param>
+        /// <returns>True if taken, false otherwise.</returns>
+        public Task<bool> IsUsernameTaken(string username)
+        {
+            return _context.Users.AnyAsync(x => x.Username == username);
+        }
+
+        /// <summary>
+        /// Checks whether an email is taken by an existing user. 
+        /// </summary>
+        /// <param name="email">The email to check.</param>
+        /// <returns>True if taken, false otherwise.</returns>
+        public Task<bool> IsEmailTaken(string email)
+        {
+            return _context.Users.AnyAsync(x => x.Email == email);
         }
     }
 }
