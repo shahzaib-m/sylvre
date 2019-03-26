@@ -27,21 +27,22 @@ namespace Sylvre.WebAPI.Services
         }
 
         /// <summary>
-        /// Authenticates a user with the given username and password.
+        /// Authenticates a user with the given username/email and password.
         /// </summary>
-        /// <param name="username">The username to authenticate.</param>
+        /// <param name="usernameOrEmail">The username/email to authenticate.</param>
         /// <param name="password">The password to authenticate.</param>
         /// <returns>The authenticated user if authenticated, null otherwise.</returns>
-        public async Task<User> AuthenticateAsync(string username, string password)
+        public async Task<User> AuthenticateAsync(string usernameOrEmail, string password)
         {
-            // if username and/or password is empty, return null (auth denied)
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            // if username/email and/or password is empty, return null (auth denied)
+            if (string.IsNullOrEmpty(usernameOrEmail) || string.IsNullOrEmpty(password))
                 return null;
 
-            // find the User by the given username
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+            // find the User by the given username/email
+            var user = await _context.Users.SingleOrDefaultAsync(x => 
+                x.Username == usernameOrEmail || x.Email == usernameOrEmail);
 
-            // if username doesn't exist, return null (auth denied)
+            // if user by username/email doesn't exist, return null (auth denied)
             if (user == null)
                 return null;
 

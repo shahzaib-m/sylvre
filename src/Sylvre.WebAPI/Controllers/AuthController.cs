@@ -40,7 +40,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <summary>
         /// Authenticates a user with the given credentials.
         /// </summary>
-        /// <param name="credentials">The username and password to authenticate.</param>
+        /// <param name="credentials">The username/email and password to authenticate.</param>
         /// <param name="strategy">The authentication strategy to use (default is token).</param>
         /// <response code="200">Authentication successful and user id, access token, and refresh token returned using the given strategy.</response>
         /// <response code="401">Unauthorized as credentials were invalid.</response>
@@ -53,7 +53,7 @@ namespace Sylvre.WebAPI.Controllers
             [FromBody] AuthRequest credentials)
         {
             var authenticatedUser = await _authService.AuthenticateAsync(
-                credentials.Username, credentials.Password);
+                credentials.UsernameOrEmail, credentials.Password);
 
             if (authenticatedUser == null)
                 return Unauthorized(new { Message = "Unauthorized" });
