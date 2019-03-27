@@ -176,6 +176,29 @@ namespace Sylvre.WebAPI.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Gets a user by the current authenticated user identity.
+        /// </summary>
+        /// <response code="200">Successfully retrieved the user by id.</response>
+        /// <response code="404">User with the given id was not found.</response>
+        /// <returns>The user by id.</returns>
+        [HttpGet("identity")]
+        [ProducesResponseType(typeof(UserResponseDto), 200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<UserResponseDto>> GetCurrentAuthenticatedUser()
+        {
+            var userEntity = await _userService.RetrieveAsync(int.Parse(User.Identity.Name));
+
+            if (userEntity == null)
+            {
+                return NotFound(new { Message = "User with given id not found" });
+            }
+
+            return Ok(GetUserResponseDtoFromUserEntity(userEntity));
+        }
+
+
         private User GetUserEntityFromUserDto(UserDto userDto)
         {
             return new User
