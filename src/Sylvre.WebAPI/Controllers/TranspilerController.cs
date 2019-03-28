@@ -23,7 +23,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(typeof(TranspileResponse), 200)]
         [ProducesResponseType(400)]
         [AllowAnonymous]
-        public ActionResult Transpile([FromQuery] TargetLanguage target, [FromBody] TranspileRequest input)
+        public ActionResult<TranspileResponse> Transpile([FromQuery] TargetLanguage target, [FromBody] TranspileRequest input)
         {
             var response = new TranspileResponse { Target = target };
 

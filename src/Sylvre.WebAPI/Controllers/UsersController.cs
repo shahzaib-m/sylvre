@@ -117,7 +117,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateUser([FromRoute]int id, [FromBody] UserDto updatedUser)
+        public async Task<ActionResult> UpdateUser([FromRoute]int id, [FromBody] UserDto updatedUser)
         {
             // if client is not an admin, they can only update themselves
             if (!User.Claims.Any(claim => claim.Value == "Admin")
@@ -156,7 +156,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserResponseDto>> DeleteUser([FromRoute] int id)
+        public async Task<ActionResult> DeleteUser([FromRoute] int id)
         {
             // if client is not an admin, they can only delete themselves
             if (!User.Claims.Any(claim => claim.Value == "Admin")

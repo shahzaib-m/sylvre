@@ -36,7 +36,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <returns>The SylvreBlock that was created.</returns>
         [HttpPost]
         [ProducesResponseType(typeof(SylvreBlockResponseDto), 201)]
-        public async Task<ActionResult<SylvreBlock>> CreateSylvreBlock(SylvreBlockDto newSylvreBlock)
+        public async Task<ActionResult<SylvreBlockResponseDto>> CreateSylvreBlock(SylvreBlockDto newSylvreBlock)
         {
             int userId = int.Parse(User.Identity.Name);
 
@@ -60,23 +60,23 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(typeof(SylvreBlockResponseDto), 200)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<SylvreBlock>> GetSylvreBlock(int id)
+        public async Task<ActionResult<SylvreBlockResponseDto>> GetSylvreBlock(int id)
         {
-            var sylvreBlock = await _context.SylvreBlocks.FindAsync(id);
+            var sylvreBlockEntity = await _context.SylvreBlocks.FindAsync(id);
 
-            if (sylvreBlock == null)
+            if (sylvreBlockEntity == null)
             {
                 return NotFound();
             }
 
             // return only blocks that belong to the authenticated user
             int userId = int.Parse(User.Identity.Name);
-            if (sylvreBlock.UserId != userId)
+            if (sylvreBlockEntity.UserId != userId)
             {
                 return Forbid("AccessToken");
             }
 
-            return Ok(sylvreBlock);
+            return Ok(GetSylvreBlockResponseDtoFromEntity(sylvreBlockEntity));
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateSylvreBlock(int id, SylvreBlockDto updatedSylvreBlock)
+        public async Task<ActionResult> UpdateSylvreBlock(int id, SylvreBlockDto updatedSylvreBlock)
         {
             var entity = await _context.SylvreBlocks.FindAsync(id);
             if (entity == null)
@@ -172,7 +172,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<SylvreBlock>> DeleteSylvreBlock(int id)
+        public async Task<ActionResult> DeleteSylvreBlock(int id)
         {
             var sylvreBlock = await _context.SylvreBlocks.FindAsync(id);
             if (sylvreBlock == null)
@@ -203,7 +203,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpPost("samples")]
         [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin")] // admin only action
         [ProducesResponseType(typeof(SylvreBlockResponseDto), 201)]
-        public async Task<ActionResult<SylvreBlock>> CreateSampleSylvreBlock(SylvreBlockDto newSylvreBlock)
+        public async Task<ActionResult<SylvreBlockResponseDto>> CreateSampleSylvreBlock(SylvreBlockDto newSylvreBlock)
         {
             int userId = int.Parse(User.Identity.Name);
 
@@ -227,7 +227,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(typeof(SylvreBlockResponseDto), 200)]
         [ProducesResponseType(404)]
         [AllowAnonymous]
-        public async Task<ActionResult<SylvreBlock>> GetSampleSylvreBlock(int id)
+        public async Task<ActionResult<SylvreBlockResponseDto>> GetSampleSylvreBlock(int id)
         {
             var sylvreBlockEntity = await _context.SylvreBlocks.SingleOrDefaultAsync(
                 x => x.Id == id && x.IsSampleBlock);

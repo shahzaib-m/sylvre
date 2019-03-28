@@ -49,7 +49,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
         [AllowAnonymous]
-        public async Task<ActionResult> Login([FromQuery] AuthStrategy strategy,
+        public async Task<ActionResult<AuthResponse>> Login([FromQuery] AuthStrategy strategy,
             [FromBody] AuthRequest credentials)
         {
             var authenticatedUser = await _authService.AuthenticateAsync(
@@ -101,7 +101,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult> Refresh([FromQuery] AuthStrategy strategy)
+        public async Task<ActionResult<AuthResponse>> Refresh([FromQuery] AuthStrategy strategy)
         {
             int userId = int.Parse(User.Identity.Name);
             User user = await _userService.RetrieveAsync(userId);

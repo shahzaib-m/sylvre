@@ -29,7 +29,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpGet("username/{username}")]
         [ProducesResponseType(typeof(AvailabilityResponse), 200)]
         [AllowAnonymous]
-        public async Task<ActionResult> IsUsernameAvailable([FromRoute] string username)
+        public async Task<ActionResult<AvailabilityResponse>> IsUsernameAvailable([FromRoute] string username)
         {
             bool isUsernameTaken = await _userService.IsUsernameTaken(username);
 
@@ -45,7 +45,7 @@ namespace Sylvre.WebAPI.Controllers
         [HttpGet("email/{email}")]
         [ProducesResponseType(typeof(AvailabilityResponse), 200)]
         [AllowAnonymous]
-        public async Task<ActionResult> IsEmailAvailable([FromRoute] [EmailAddress] string email)
+        public async Task<ActionResult<AvailabilityResponse>> IsEmailAvailable([FromRoute] [EmailAddress] string email)
         {
             bool isEmailTaken = await _userService.IsEmailTaken(email);
 
