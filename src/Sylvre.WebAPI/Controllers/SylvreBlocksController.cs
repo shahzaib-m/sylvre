@@ -82,25 +82,40 @@ namespace Sylvre.WebAPI.Controllers
         /// <summary>
         /// Gets all the SylvreBlocks under the authenticated user.
         /// </summary>
+        /// <param name="noBody">Whether the body (code) should be omitted for all code blocks.</param>
         /// <response code="200">Successfully retrieved all the Sylvre blocks under the authenticated user.</response>
         /// <returns>THe list of Sylvre blocks.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<IEnumerable<SylvreBlockResponseDto>>> GetSylvreBlocks()
+        public ActionResult<IEnumerable<SylvreBlockResponseDto>> GetSylvreBlocks([FromQuery] bool noBody)
         {
             // return only blocks that belong to the authenticated user
             int userId = int.Parse(User.Identity.Name);
 
-            IEnumerable<SylvreBlock> entities = await _context.SylvreBlocks.Where(
-                x => x.UserId == userId).ToListAsync();
-
-            var response = new List<SylvreBlockResponseDto>();
-            foreach (SylvreBlock entity in entities)
+            IEnumerable<SylvreBlock> entities = _context.SylvreBlocks
+                                                        .Where(x => x.UserId == userId);
+            if (noBody)
             {
-                response.Add(GetSylvreBlockResponseDtoFromEntity(entity));
-            }
+                IEnumerable<SylvreBlockResponseDto> response;
+                response = entities.Select(
+                        x => new SylvreBlockResponseDto
+                        {
+                            Id = x.Id,
+                            Name = x.Name
+                        }).ToList();
 
-            return Ok(response);
+                return Ok(response);
+            }
+            else
+            {
+                List<SylvreBlockResponseDto> response = new List<SylvreBlockResponseDto>();
+                foreach (SylvreBlock entity in entities)
+                {
+                    response.Add(GetSylvreBlockResponseDtoFromEntity(entity));
+                }
+
+                return Ok(response);
+            }
         }
 
         /// <summary>
