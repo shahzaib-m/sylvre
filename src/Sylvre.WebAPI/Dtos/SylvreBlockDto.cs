@@ -18,5 +18,7 @@ namespace Sylvre.WebAPI.Dtos
         public string Name { get; set; }
 
         public string Body { get; set; }
+
+        public bool IsSampleBlock { get; set; }
     }
 }

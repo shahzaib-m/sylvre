@@ -84,7 +84,7 @@ namespace Sylvre.WebAPI.Controllers
         /// </summary>
         /// <param name="noBody">Whether the body (code) should be omitted for all code blocks.</param>
         /// <response code="200">Successfully retrieved all the Sylvre blocks under the authenticated user.</response>
-        /// <returns>THe list of Sylvre blocks.</returns>
+        /// <returns>The list of Sylvre blocks.</returns>
         [HttpGet]
         [ProducesResponseType(200)]
         public ActionResult<IEnumerable<SylvreBlockResponseDto>> GetSylvreBlocks([FromQuery] bool noBody)
@@ -193,6 +193,63 @@ namespace Sylvre.WebAPI.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Creates a new sample Sylvre block under the authenticated user.
+        /// </summary>
+        /// <param name="newSylvreBlock">The sample SylvreBlock to create.</param>
+        /// <response code="201">Successfully created the sample SylvreBlock under the authenticated user.</response>
+        /// <returns>The sample SylvreBlock that was created.</returns>
+        [HttpPost("samples")]
+        [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin")] // admin only action
+        [ProducesResponseType(typeof(SylvreBlockResponseDto), 201)]
+        public async Task<ActionResult<SylvreBlock>> CreateSampleSylvreBlock(SylvreBlockDto newSylvreBlock)
+        {
+            int userId = int.Parse(User.Identity.Name);
+
+            var entity = GetSylvreBlockEntityFromDto(newSylvreBlock, userId);
+            entity.IsSampleBlock = true;
+            _context.SylvreBlocks.Add(entity);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("CreateSylvreBlock", new { id = entity.Id },
+                GetSylvreBlockResponseDtoFromEntity(entity));
+        }
+
+        /// <summary>
+        /// Gets all the sample SylvreBlocks.
+        /// </summary>
+        /// <param name="noBody">Whether the body (code) should be omitted for all sample code blocks.</param>
+        /// <response code="200">Successfully retrieved all the sample Sylvre blocks.</response>
+        /// <returns>The list of sample Sylvre blocks.</returns>
+        [HttpGet("samples")]
+        public ActionResult<IEnumerable<SylvreBlockResponseDto>> GetSampleSylvreBlocks([FromQuery] bool noBody)
+        {
+            IEnumerable<SylvreBlock> entities = _context.SylvreBlocks
+                                                        .Where(x => x.IsSampleBlock);
+            if (noBody)
+            {
+                IEnumerable<SylvreBlockResponseDto> response;
+                response = entities.Select(
+                        x => new SylvreBlockResponseDto
+                        {
+                            Id = x.Id,
+                            Name = x.Name
+                        }).ToList();
+
+                return Ok(response);
+            }
+            else
+            {
+                List<SylvreBlockResponseDto> response = new List<SylvreBlockResponseDto>();
+                foreach (SylvreBlock entity in entities)
+                {
+                    response.Add(GetSylvreBlockResponseDtoFromEntity(entity));
+                }
+
+                return Ok(response);
+            }
+        }
+
 
         private SylvreBlockResponseDto GetSylvreBlockResponseDtoFromEntity(SylvreBlock entity)
         {
@@ -200,7 +257,8 @@ namespace Sylvre.WebAPI.Controllers
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                Body = entity.Body
+                Body = entity.Body,
+                IsSampleBlock = entity.IsSampleBlock
             };
         }
         private SylvreBlock GetSylvreBlockEntityFromDto(SylvreBlockDto dto, int userId)
