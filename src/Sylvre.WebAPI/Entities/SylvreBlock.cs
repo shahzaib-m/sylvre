@@ -13,5 +13,7 @@ namespace Sylvre.WebAPI.Entities
 
         public int UserId { get; set; }
         public User User { get; }
+
+        public bool IsSampleBlock { get; set; } = false;
     }
 }
