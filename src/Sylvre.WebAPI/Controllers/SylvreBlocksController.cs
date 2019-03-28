@@ -101,7 +101,8 @@ namespace Sylvre.WebAPI.Controllers
                         x => new SylvreBlockResponseDto
                         {
                             Id = x.Id,
-                            Name = x.Name
+                            Name = x.Name,
+                            IsSampleBlock = x.IsSampleBlock
                         }).ToList();
 
                 return Ok(response);
@@ -260,7 +261,8 @@ namespace Sylvre.WebAPI.Controllers
                         x => new SylvreBlockResponseDto
                         {
                             Id = x.Id,
-                            Name = x.Name
+                            Name = x.Name,
+                            IsSampleBlock = x.IsSampleBlock
                         }).ToList();
 
                 return Ok(response);
