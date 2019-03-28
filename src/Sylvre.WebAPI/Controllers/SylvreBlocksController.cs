@@ -193,6 +193,7 @@ namespace Sylvre.WebAPI.Controllers
             return NoContent();
         }
 
+
         /// <summary>
         /// Creates a new sample Sylvre block under the authenticated user.
         /// </summary>
@@ -213,6 +214,30 @@ namespace Sylvre.WebAPI.Controllers
 
             return CreatedAtAction("CreateSylvreBlock", new { id = entity.Id },
                 GetSylvreBlockResponseDtoFromEntity(entity));
+        }
+
+        /// <summary>
+        /// Gets a sample SylvreBlock by id.
+        /// </summary>
+        /// <param name="id">The id of the sample SylvreBlock to get.</param>
+        /// <response code="200">Successfully retrieved the sample SylvreBlock by id.</response>
+        /// <response code="404">Sample SylvreBlock with the given id was not found.</response>
+        /// <returns>The sample SylvreBlock by id.</returns>
+        [HttpGet("samples/{id}")]
+        [ProducesResponseType(typeof(SylvreBlockResponseDto), 200)]
+        [ProducesResponseType(404)]
+        [AllowAnonymous]
+        public async Task<ActionResult<SylvreBlock>> GetSampleSylvreBlock(int id)
+        {
+            var sylvreBlockEntity = await _context.SylvreBlocks.SingleOrDefaultAsync(
+                x => x.Id == id && x.IsSampleBlock);
+
+            if (sylvreBlockEntity == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(GetSylvreBlockResponseDtoFromEntity(sylvreBlockEntity));
         }
 
         /// <summary>
