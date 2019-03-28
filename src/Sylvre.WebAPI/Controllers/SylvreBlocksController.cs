@@ -86,7 +86,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="200">Successfully retrieved all the Sylvre blocks under the authenticated user.</response>
         /// <returns>The list of Sylvre blocks.</returns>
         [HttpGet]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(IEnumerable<SylvreBlockDto>), 200)]
         public ActionResult<IEnumerable<SylvreBlockResponseDto>> GetSylvreBlocks([FromQuery] bool noBody)
         {
             // return only blocks that belong to the authenticated user
@@ -222,6 +222,8 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="200">Successfully retrieved all the sample Sylvre blocks.</response>
         /// <returns>The list of sample Sylvre blocks.</returns>
         [HttpGet("samples")]
+        [ProducesResponseType(typeof(IEnumerable<SylvreBlockDto>), 200)]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<SylvreBlockResponseDto>> GetSampleSylvreBlocks([FromQuery] bool noBody)
         {
             IEnumerable<SylvreBlock> entities = _context.SylvreBlocks
