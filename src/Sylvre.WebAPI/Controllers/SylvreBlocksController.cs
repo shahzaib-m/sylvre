@@ -53,11 +53,13 @@ namespace Sylvre.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The id of the SylvreBlock to get.</param>
         /// <response code="200">Successfully retrieved the SylvreBlock by id.</response>
+        /// <response code="400">If the block is a sample block (use /samples/{id} instead).</response>
         /// <response code="403">Unauthorized to get this block as it does not belong to the authenticated user.</response>
         /// <response code="404">SylvreBlock with the given id was not found.</response>
         /// <returns>The SylvreBlock by id.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(SylvreBlockResponseDto), 200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<SylvreBlockResponseDto>> GetSylvreBlock(int id)
@@ -67,6 +69,11 @@ namespace Sylvre.WebAPI.Controllers
             if (sylvreBlockEntity == null)
             {
                 return NotFound();
+            }
+
+            if (sylvreBlockEntity.IsSampleBlock)
+            {
+                return BadRequest();
             }
 
             // return only blocks that belong to the authenticated user
@@ -93,7 +100,8 @@ namespace Sylvre.WebAPI.Controllers
             int userId = int.Parse(User.Identity.Name);
 
             IEnumerable<SylvreBlock> entities = _context.SylvreBlocks
-                                                        .Where(x => x.UserId == userId);
+                                                        .Where(x => x.UserId == userId
+                                                                 && !x.IsSampleBlock);  // omit sample blocks
             if (noBody)
             {
                 IEnumerable<SylvreBlockResponseDto> response;
@@ -125,11 +133,13 @@ namespace Sylvre.WebAPI.Controllers
         /// <param name="id">The id of the SylvreBlock to update.</param>
         /// <param name="updatedSylvreBlock">The updated SylvreBlock.</param>
         /// <response code="204">Successfully updated the SylvreBlock by id.</response>
+        /// <response code="400">If the block is a sample block (use /samples/{id} instead).</response>
         /// <response code="403">Unauthorized to update this block as it does not belong to the authenticated user.</response>
         /// <response code="404">SylvreBlock with the given id was not found.</response>
         /// <returns>204 No Content response.</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         public async Task<ActionResult> UpdateSylvreBlock(int id, SylvreBlockDto updatedSylvreBlock)
@@ -145,6 +155,11 @@ namespace Sylvre.WebAPI.Controllers
             if (entity.UserId != userId)
             {
                 return Forbid("AccessToken");
+            }
+
+            if (entity.IsSampleBlock)
+            {
+                return BadRequest();
             }
 
             _context.SylvreBlocks.Attach(entity);
@@ -166,11 +181,13 @@ namespace Sylvre.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The id of the SylvreBlock to delete.</param>
         /// <response code="204">Successfully deleted the SylvreBlock by id.</response>
+        /// <response code="400">If the block is a sample block (use /samples/{id} instead).</response>
         /// <response code="403">Unauthorized to delete this block as it does not belong to the authenticated user.</response>
         /// <response code="404">SylvreBlock with the given id was not found.</response>
         /// <returns>204 No Content response.</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteSylvreBlock(int id)
@@ -179,6 +196,11 @@ namespace Sylvre.WebAPI.Controllers
             if (sylvreBlock == null)
             {
                 return NotFound();
+            }
+
+            if (sylvreBlock.IsSampleBlock)
+            {
+                return BadRequest();
             }
 
             // delete only blocks that belong to the authenticated user
