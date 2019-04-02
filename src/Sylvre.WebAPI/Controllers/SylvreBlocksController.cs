@@ -301,6 +301,69 @@ namespace Sylvre.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a sample Sylvre block by id.
+        /// </summary>
+        /// <param name="id">The id of the sample SylvreBlock to update.</param>
+        /// <param name="updatedSylvreBlock">The updated sample SylvreBlock.</param>
+        /// <response code="204">Successfully updated the sample SylvreBlock by id.</response>
+        /// <response code="404">Sample SylvreBlock with the given id was not found.</response>
+        /// <returns>204 No Content response.</returns>
+        [HttpPut("samples/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin")] // admin only action
+        public async Task<ActionResult> UpdateSampleSylvreBlock(int id, SylvreBlockDto updatedSylvreBlock)
+        {
+            var sylvreBlockEntity = await _context.SylvreBlocks.SingleOrDefaultAsync(
+                x => x.Id == id && x.IsSampleBlock);
+
+            if (sylvreBlockEntity == null)
+            {
+                return NotFound();
+            }
+
+            _context.SylvreBlocks.Attach(sylvreBlockEntity);
+
+            if (!string.IsNullOrWhiteSpace(updatedSylvreBlock.Name))
+                sylvreBlockEntity.Name = updatedSylvreBlock.Name;
+
+            if (!string.IsNullOrWhiteSpace(updatedSylvreBlock.Body))
+                sylvreBlockEntity.Body = updatedSylvreBlock.Body;
+
+            _context.SylvreBlocks.Update(sylvreBlockEntity);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Deletes a sample Sylvre block by id.
+        /// </summary>
+        /// <param name="id">The id of the sample SylvreBlock to delete.</param>
+        /// <response code="204">Successfully deleted the sample SylvreBlock by id.</response>
+        /// <response code="404">Sample SylvreBlock with the given id was not found.</response>
+        /// <returns>204 No Content response.</returns>
+        [HttpDelete("samples/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin")] // admin only action
+        public async Task<ActionResult> DeleteSampleSylvreBlock(int id)
+        {
+            var sylvreBlockEntity = await _context.SylvreBlocks.SingleOrDefaultAsync(
+                x => x.Id == id && x.IsSampleBlock);
+
+            if (sylvreBlockEntity == null)
+            {
+                return NotFound();
+            }
+
+            _context.SylvreBlocks.Remove(sylvreBlockEntity);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         private SylvreBlockResponseDto GetSylvreBlockResponseDtoFromEntity(SylvreBlock entity)
         {
