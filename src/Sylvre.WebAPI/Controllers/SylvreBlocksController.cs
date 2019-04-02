@@ -101,7 +101,8 @@ namespace Sylvre.WebAPI.Controllers
 
             IEnumerable<SylvreBlock> entities = _context.SylvreBlocks
                                                         .Where(x => x.UserId == userId
-                                                                 && !x.IsSampleBlock);  // omit sample blocks
+                                                                 && !x.IsSampleBlock)   // omit sample blocks
+                                                        .OrderByDescending(x => x.Id);
             if (noBody)
             {
                 IEnumerable<SylvreBlockResponseDto> response;
