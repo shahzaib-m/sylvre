@@ -1,2 +1,5 @@
-﻿Console:output:log
+﻿Input:get:prompt
+Console:output:log
 Console:refresh:clear
+Parse:toNumber:parseInt
+Parse:toDecimal:parseFloat

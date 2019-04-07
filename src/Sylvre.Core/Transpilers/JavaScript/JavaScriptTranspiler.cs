@@ -106,8 +106,12 @@ namespace Sylvre.Core.Transpilers.JavaScript
                 return;
             }
 
-
-            _output.Append(SylvreJavaScriptMappings.GetEquivalentJavaScriptModule(module));
+            string jsEquivalentModule = SylvreJavaScriptMappings.GetEquivalentJavaScriptModule(module);
+            if (!string.IsNullOrWhiteSpace(jsEquivalentModule))
+            {
+                _output.Append(jsEquivalentModule)
+                       .Append('.');
+            }
 
             if (suffixes.Length <= 1)
             {
@@ -152,8 +156,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
                 return;
             }
 
-            _output.Append('.')
-                   .Append(SylvreJavaScriptMappings.GetEquivalentJavaScriptMemberOfModule(
+            _output.Append(SylvreJavaScriptMappings.GetEquivalentJavaScriptMemberOfModule(
                 module, moduleMember));
 
             for (int i = 2; i < context.variable_suffix().Length; i++)
