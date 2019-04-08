@@ -17,8 +17,10 @@ namespace Sylvre.WebAPI.Services
         Task<User> CreateAsync(User newUser, string password);
         Task<User> RetrieveAsync(int id);
         Task<List<User>> RetrieveAllAsync();
-        Task UpdateAsync(User updatedUser, User userToUpdate, string password = null);
+        Task UpdateAsync(User updatedUser, User userToUpdate);
         Task DeleteAsync(User userToDelete);
+
+        Task ChangePassword(string newPassword, User userToUpdate);
 
         Task<bool> IsUsernameTaken(string username);
         Task<bool> IsEmailTaken(string email);
@@ -103,9 +105,8 @@ namespace Sylvre.WebAPI.Services
         /// </summary>
         /// <param name="updatedUser">The new updated user entity.</param>
         /// <param name="userToUpdate">The user entity to update.</param>
-        /// <param name="password">The new password for the user (optional).</param>
         /// <exception cref="UserServiceException">Throws when invalid/reserved values are found.</exception>
-        public async Task UpdateAsync(User updatedUser, User userToUpdate, string password = null)
+        public async Task UpdateAsync(User updatedUser, User userToUpdate)
         {
             _context.Users.Attach(userToUpdate);
 
@@ -133,14 +134,6 @@ namespace Sylvre.WebAPI.Services
             if (!string.IsNullOrWhiteSpace(updatedUser.FullName))
                 userToUpdate.FullName = updatedUser.FullName;
 
-            // update if new password is sent
-            if (!string.IsNullOrWhiteSpace(password))
-            {
-                HashUtils.GenerateHashAndSaltFromString(password, out byte[] hash, out byte[] salt);
-                userToUpdate.PasswordHash = hash;
-                userToUpdate.PasswordSalt = salt;
-            }
-
             _context.Users.Update(userToUpdate);
             await _context.SaveChangesAsync();
         }
@@ -153,6 +146,24 @@ namespace Sylvre.WebAPI.Services
         {
             // delete user
             _context.Users.Remove(userToDelete);
+            await _context.SaveChangesAsync();
+        }
+
+
+        /// <summary>
+        /// Updates an existing user's password.
+        /// </summary>
+        /// <param name="newPassword">The new password to set.</param>
+        /// <param name="userToUpdate">The user to update the password for.</param>
+        public async Task ChangePassword(string newPassword, User userToUpdate)
+        {
+            _context.Users.Attach(userToUpdate);
+
+            HashUtils.GenerateHashAndSaltFromString(newPassword, out byte[] hash, out byte[] salt);
+            userToUpdate.PasswordHash = hash;
+            userToUpdate.PasswordSalt = salt;
+
+            _context.Users.Update(userToUpdate);
             await _context.SaveChangesAsync();
         }
 

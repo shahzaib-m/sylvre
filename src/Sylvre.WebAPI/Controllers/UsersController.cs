@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Sylvre.WebAPI.Dtos;
 using Sylvre.WebAPI.Entities;
 
+using Sylvre.WebAPI.Data;
 using Sylvre.WebAPI.Services;
 using Sylvre.WebAPI.Services.Exceptions;
 
@@ -137,8 +138,7 @@ namespace Sylvre.WebAPI.Controllers
             var updatedUserEntity = GetUserEntityFromUserDto(updatedUser);
             try
             {
-                await _userService.UpdateAsync(updatedUserEntity, userToUpdateEntity,
-                    updatedUser.Password);
+                await _userService.UpdateAsync(updatedUserEntity, userToUpdateEntity);
             }
             catch (UserServiceException ex)
             {
@@ -149,7 +149,7 @@ namespace Sylvre.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Deletes a user by id.
+        /// Deletes a user by id (unsafe - re-authentication required for standard user).
         /// </summary>
         /// <param name="id">The id of the user to delete.</param>
         /// <response code="204">Successfully deleted the user.</response>
@@ -199,6 +199,64 @@ namespace Sylvre.WebAPI.Controllers
             }
 
             await _userService.DeleteAsync(userToDeleteEntity);
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Changes the password of a user by id (unsafe - re-authentication required for standard user).
+        /// </summary>
+        /// <param name="id">The id of the user to update the password for.</param>
+        /// <param name="changePasswordRequest">THe request containing the new password to set for this user.</param>
+        /// <response code="204">Successfully updated the password for this user.</response>
+        /// <response code="401">Re-authentication header wasn't provided, was invalid base64, or failed.</response>
+        /// <response code="403">The current user is updating another user id and is not an admin.</response>
+        /// <response code="404">User to update the password for was not found by their id.</response>
+        /// <returns>204 No Content response.</returns>
+        [HttpPut("{id}/password")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult> ChangePassword([FromRoute] int id, 
+            [FromBody] ChangePasswordRequest changePasswordRequest)
+        {
+            // if client is not an admin, they can only update their own password
+            if (!User.Claims.Any(claim => claim.Value == "Admin")
+                    && User.Identity.Name != id.ToString())
+            {
+                return Forbid("AccessToken");
+            }
+
+            // if client is not an admin, re-authentication is required
+            if (!User.Claims.Any(claim => claim.Value == "Admin"))
+            {
+                bool reAuth = Request.Headers.TryGetValue("Sylvre-Reauthenticate-Pass",
+                    out var base64Pass);
+                if (!reAuth)
+                {
+                    return Unauthorized("Reauthenticate");
+                }
+
+                string decodedPass;
+                try { decodedPass = DecodeBase64String(base64Pass); }
+                catch (FormatException) { return Unauthorized("Reauthenticate"); }
+
+                bool isValidPass = await _userService.IsCorrectPasswordForUserId(decodedPass,
+                    int.Parse(User.Identity.Name));
+                if (!isValidPass)
+                {
+                    return Unauthorized("Unauthorised");
+                }
+            }
+
+            var userToUpdateEntity = await _userService.RetrieveAsync(id);
+            if (userToUpdateEntity == null)
+            {
+                return NotFound(new { Message = "User with given id not found" });
+            }
+
+            await _userService.ChangePassword(changePasswordRequest.NewPassword, userToUpdateEntity);
 
             return NoContent();
         }

@@ -71,6 +71,7 @@ namespace Sylvre.WebAPI
                 c.IncludeXmlComments(webApiDoc, includeControllerXmlComments: true);
 
                 c.OperationFilter<AuthHeaderFilter>();
+                c.OperationFilter<ReauthenticationHeaderFilter>();
             });
 
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
