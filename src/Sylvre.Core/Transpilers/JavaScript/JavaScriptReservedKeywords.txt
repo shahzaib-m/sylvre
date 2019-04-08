@@ -87,6 +87,7 @@ layer
 layers
 let
 link
+localStorage
 location
 long
 Math
