@@ -26,7 +26,7 @@ namespace Sylvre.WebAPI.Swagger
                     In = "header",
                     Type = "string",
                     Required = true,
-                    Description = "The JWT refresh token to get a new access token and refresh token with as following: Bearer <jwt_token_here>",
+                    Description = "The refresh token (JWT) to get a new access token and refresh token with as following: Bearer <jwt_here>",
                 });
             }
             else if (!allowAnonymous && operation.OperationId == "Logout")
@@ -37,7 +37,7 @@ namespace Sylvre.WebAPI.Swagger
                     In = "header",
                     Type = "string",
                     Required = true,
-                    Description = "The JWT refresh token to log out and destroy as following: Bearer <jwt_token_here>",
+                    Description = "The refresh token (JWT) to log out and destroy as following: Bearer <jwt_here>",
                 });
             }
             else if (!allowAnonymous)
@@ -48,7 +48,7 @@ namespace Sylvre.WebAPI.Swagger
                     In = "header",
                     Type = "string",
                     Required = true,
-                    Description = "The JWT access token to authenticate requests with as following: Bearer <jwt_token_here>",
+                    Description = "The access token (JWT) to authenticate requests with as following: Bearer <jwt_here>",
                 });
             }
         }

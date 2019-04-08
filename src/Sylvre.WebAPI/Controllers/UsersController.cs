@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -151,10 +153,14 @@ namespace Sylvre.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The id of the user to delete.</param>
         /// <response code="204">Successfully deleted the user.</response>
+        /// <response code="401">Re-authentication header wasn't provided, was invalid base64, or failed.</response>
+        /// <response code="403">The current user is deleting another user id and is not an admin.</response>
         /// <response code="404">User to delete was not found by their id.</response>
         /// <returns>204 No Content response.</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteUser([FromRoute] int id)
         {
@@ -163,6 +169,27 @@ namespace Sylvre.WebAPI.Controllers
                     && User.Identity.Name != id.ToString())
             {
                 return Forbid("AccessToken");
+            }
+
+            // if client is not an admin, re-authentication is required
+            if (!User.Claims.Any(claim => claim.Value == "Admin"))
+            {
+                bool reAuth = Request.Headers.TryGetValue("Sylvre-Reauthenticate-Pass", 
+                    out var base64Pass);
+                if (!reAuth)
+                {
+                    return Unauthorized("Reauthenticate");
+                }
+
+                string decodedPass;
+                try { decodedPass = DecodeBase64String(base64Pass); }
+                catch (FormatException) { return Unauthorized("Reauthenticate"); }
+
+                bool isValidPass = await _userService.IsCorrectPasswordForUserId(decodedPass,
+                    int.Parse(User.Identity.Name));
+                if (!isValidPass) {
+                    return Unauthorized("Unauthorised");
+                }
             }
 
             var userToDeleteEntity = await _userService.RetrieveAsync(id);
@@ -218,6 +245,12 @@ namespace Sylvre.WebAPI.Controllers
                 FullName = user.FullName,
                 IsAdmin = user.IsAdmin
             };
+        }
+
+        private static string DecodeBase64String(string base64String)
+        {
+            byte[] decodedData = Convert.FromBase64String(base64String);
+            return Encoding.UTF8.GetString(decodedData);
         }
     }
 }

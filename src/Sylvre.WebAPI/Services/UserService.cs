@@ -22,6 +22,7 @@ namespace Sylvre.WebAPI.Services
 
         Task<bool> IsUsernameTaken(string username);
         Task<bool> IsEmailTaken(string email);
+        Task<bool> IsCorrectPasswordForUserId(string password, int userId);
     }
 
     public class UserService : IUserService
@@ -174,6 +175,19 @@ namespace Sylvre.WebAPI.Services
         public Task<bool> IsEmailTaken(string email)
         {
             return _context.Users.AnyAsync(x => x.Email == email);
+        }
+
+        /// <summary>
+        /// Checks whether a given password is the correct password the given user id.
+        /// </summary>
+        /// <param name="password">The password to validate.</param>
+        /// <param name="userId">The user id the password belongs to.</param>
+        /// <returns>True if correct, false otherwise.</returns>
+        public async Task<bool> IsCorrectPasswordForUserId(string password, int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return HashUtils.IsStringValidAgainstHashAndSalt(password,
+                user.PasswordHash, user.PasswordSalt);
         }
     }
 }
