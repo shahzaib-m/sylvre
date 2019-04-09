@@ -153,13 +153,13 @@ namespace Sylvre.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The id of the user to delete.</param>
         /// <response code="204">Successfully deleted the user.</response>
-        /// <response code="401">Re-authentication header wasn't provided, was invalid base64, or failed.</response>
+        /// <response code="400">Re-authentication header wasn't provided, was invalid base64, or failed because of invalid current password.</response>
         /// <response code="403">The current user is deleting another user id and is not an admin.</response>
         /// <response code="404">User to delete was not found by their id.</response>
         /// <returns>204 No Content response.</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
-        [ProducesResponseType(401)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteUser([FromRoute] int id)
@@ -178,17 +178,17 @@ namespace Sylvre.WebAPI.Controllers
                     out var base64Pass);
                 if (!reAuth)
                 {
-                    return Unauthorized("Reauthenticate");
+                    return BadRequest();
                 }
 
                 string decodedPass;
                 try { decodedPass = DecodeBase64String(base64Pass); }
-                catch (FormatException) { return Unauthorized("Reauthenticate"); }
+                catch (FormatException) { return BadRequest(); }
 
                 bool isValidPass = await _userService.IsCorrectPasswordForUserId(decodedPass,
                     int.Parse(User.Identity.Name));
                 if (!isValidPass) {
-                    return Unauthorized("Unauthorised");
+                    return BadRequest();
                 }
             }
 
@@ -209,13 +209,13 @@ namespace Sylvre.WebAPI.Controllers
         /// <param name="id">The id of the user to update the password for.</param>
         /// <param name="changePasswordRequest">THe request containing the new password to set for this user.</param>
         /// <response code="204">Successfully updated the password for this user.</response>
-        /// <response code="401">Re-authentication header wasn't provided, was invalid base64, or failed.</response>
+        /// <response code="400">Re-authentication header wasn't provided, was invalid base64, or failed because of invalid current password.</response>
         /// <response code="403">The current user is updating another user id and is not an admin.</response>
         /// <response code="404">User to update the password for was not found by their id.</response>
         /// <returns>204 No Content response.</returns>
         [HttpPut("{id}/password")]
         [ProducesResponseType(204)]
-        [ProducesResponseType(401)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         public async Task<ActionResult> ChangePassword([FromRoute] int id, 
@@ -235,18 +235,18 @@ namespace Sylvre.WebAPI.Controllers
                     out var base64Pass);
                 if (!reAuth)
                 {
-                    return Unauthorized("Reauthenticate");
+                    return BadRequest();
                 }
 
                 string decodedPass;
                 try { decodedPass = DecodeBase64String(base64Pass); }
-                catch (FormatException) { return Unauthorized("Reauthenticate"); }
+                catch (FormatException) { return BadRequest(); }
 
                 bool isValidPass = await _userService.IsCorrectPasswordForUserId(decodedPass,
                     int.Parse(User.Identity.Name));
                 if (!isValidPass)
                 {
-                    return Unauthorized("Unauthorised");
+                    return BadRequest();
                 }
             }
 
