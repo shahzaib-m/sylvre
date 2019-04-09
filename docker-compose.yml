@@ -1,7 +1,6 @@
 version: '3'
 
 services:
-
   webapi:
     container_name: sylvre-webapi
     image: shahzaibm/sylvre-webapi:latest
@@ -28,4 +27,9 @@ services:
       POSTGRES_USER: "sylvre-webapi"
       POSTGRES_PASSWORD: "password"
       POSTGRES_DB: "sylvre-webapi"
+    volumes:
+      - sylvre-webapi-db-data:/var/lib/postgresql/data
     restart: unless-stopped
+
+volumes:
+  sylvre-webapi-db-data:
