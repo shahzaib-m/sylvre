@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sylvre.WebAPI.Dtos;
 
 namespace Sylvre.WebAPI.Entities
 {

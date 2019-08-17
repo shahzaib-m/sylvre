@@ -6,5 +6,6 @@
         public string KnownProxies { get; set; }
         public string CorsOrigin { get; set; }
         public string CookieDomain { get; set; }
+        public string ApiDocsRootUrl { get; set; }
     }
 }
