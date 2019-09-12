@@ -228,7 +228,10 @@ namespace Sylvre.WebAPI
             string apiDocsRootUrl = Configuration.GetSection("AppSettings").Get<AppSettings>().ApiDocsRootUrl;
 
             app.UseStaticFiles();
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "{documentName}/docs.json";
+            });
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = string.Empty;
