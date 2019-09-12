@@ -234,9 +234,9 @@ namespace Sylvre.WebAPI
             });
             app.UseSwaggerUI(c =>
             {
-                c.RoutePrefix = "documentation";
+                c.RoutePrefix = "api/documentation";
                 c.DocumentTitle = "Sylvre Web API Interactive Documentation";
-                c.SwaggerEndpoint($"{apiDocsRootUrl}/v1/docs.json", "Sylvre Web API V1");
+                c.SwaggerEndpoint($"/{apiDocsRootUrl}/v1/docs.json", "Sylvre Web API V1");
 
                 c.InjectStylesheet("/swagger-ui/theme-flattop.css");
             });
