@@ -11,7 +11,6 @@ services:
       APPSETTINGS__SECRET: ${SYLVREWEBAPI_SECRET}
       APPSETTINGS__CORSORIGIN: ${SYLVREWEBAPI_CORSORIGIN}
       APPSETTINGS__COOKIEDOMAIN: ${SYLVREWEBAPI_COOKIEDOMAIN}
-      APPSETTINGS__APIDOCSROOTURL: ${SYLVREWEBAPI_APIDOCSROOTURL}
       CONNECTIONSTRINGS__SYLVREWEBAPIDBCONNECTION: "User ID=sylvre-webapi;Password=password;Server=sylvre-webapi-db;Port=5432;Database=sylvre-webapi;Integrated Security=true;Pooling=true;"
     depends_on:
       - "db"

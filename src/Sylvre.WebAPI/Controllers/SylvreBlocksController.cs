@@ -13,7 +13,7 @@ using Sylvre.WebAPI.Services;
 
 namespace Sylvre.WebAPI.Controllers
 {
-    [Route("sylvreblocks")]
+    [Route("api/sylvreblocks")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin, User")]
     public class SylvreBlocksController : ControllerBase

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Sylvre.WebAPI.Controllers
 {
-    [Route("users")]
+    [Route("api/users")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "AccessToken", Roles = "Admin, User")]
     public class UsersController : ControllerBase

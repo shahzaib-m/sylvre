@@ -7,7 +7,7 @@ using Sylvre.WebAPI.Data;
 
 namespace Sylvre.WebAPI.Controllers
 {
-    [Route("/transpiler")]
+    [Route("api/transpiler")]
     [ApiController]
     public class TranspilerController : ControllerBase
     {

@@ -9,7 +9,7 @@ using Sylvre.WebAPI.Services;
 
 namespace Sylvre.WebAPI.Controllers
 {
-    [Route("availability")]
+    [Route("api/availability")]
     [ApiController]
     public class AvailabilityController : ControllerBase
     {

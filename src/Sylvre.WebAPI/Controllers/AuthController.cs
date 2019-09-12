@@ -19,7 +19,7 @@ using Sylvre.WebAPI.Services;
 
 namespace Sylvre.WebAPI.Controllers
 {
-    [Route("auth")]
+    [Route("api/auth")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "RefreshToken", Roles = "Admin, User")]
     public class AuthController : ControllerBase
