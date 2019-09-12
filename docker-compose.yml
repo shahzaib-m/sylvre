@@ -6,7 +6,7 @@ services:
     image: shahzaibm/sylvre-webapi:latest
     hostname: sylvre-webapi
     ports:
-      - 50005:80
+      - ${API_PORT_ON_HOST}:80
     environment:
       APPSETTINGS__SECRET: ${SYLVREWEBAPI_SECRET}
       APPSETTINGS__CORSORIGIN: ${SYLVREWEBAPI_CORSORIGIN}
