@@ -228,15 +228,12 @@ namespace Sylvre.WebAPI
             string apiDocsRootUrl = Configuration.GetSection("AppSettings").Get<AppSettings>().ApiDocsRootUrl;
 
             app.UseStaticFiles();
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = $"documentation/{{documentName}}/docs.json";
-            });
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = string.Empty;
                 c.DocumentTitle = "Sylvre Web API Interactive Documentation";
-                c.SwaggerEndpoint($"./documentation/v1/docs.json", "Sylvre Web API V1");
+                c.SwaggerEndpoint("./v1/docs.json", "Sylvre Web API V1");
             });
 
             string corsOrigin = Configuration.GetSection("AppSettings").Get<AppSettings>().CorsOrigin;
