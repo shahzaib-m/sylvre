@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\swagger-ui\theme-flattop.css" />
+    <None Include="wwwroot\api\swagger-ui\theme-flattop.css" />
   </ItemGroup>
 
 </Project>
