@@ -230,13 +230,13 @@ namespace Sylvre.WebAPI
             app.UseStaticFiles();
             app.UseSwagger(c =>
             {
-                c.RouteTemplate = $"{apiDocsRootUrl}/{{documentName}}/docs.json";
+                c.RouteTemplate = $"documentation/{{documentName}}/docs.json";
             });
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "documentation";
                 c.DocumentTitle = "Sylvre Web API Interactive Documentation";
-                c.SwaggerEndpoint("/documentation/v1/docs.json", "Sylvre Web API V1");
+                c.SwaggerEndpoint($"/{apiDocsRootUrl}/v1/docs.json", "Sylvre Web API V1");
 
                 c.InjectStylesheet("/swagger-ui/theme-flattop.css");
             });
