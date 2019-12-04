@@ -200,7 +200,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <returns>The generated JWT token.</returns>
         private JwtSecurityToken GenerateJwtToken(int userId, bool IsAdmin, JwtTokenType tokenType)
         {
-            var secretAsBytes = Encoding.UTF8.GetBytes(_appSettings.Secret);
+            var secretAsBytes = Encoding.UTF8.GetBytes(_appSettings.SylApi_Secret);
             var symmetricSecurityKey = new SymmetricSecurityKey(secretAsBytes);
 
             var signingCredentials = new SigningCredentials(symmetricSecurityKey,
@@ -251,7 +251,7 @@ namespace Sylvre.WebAPI.Controllers
                 HttpOnly = true,
                 Secure = true,
                 IsEssential = true,
-                Domain = _appSettings.CookieDomain,
+                Domain = _appSettings.SylApi_CookieDomain,
                 SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax
             };
 

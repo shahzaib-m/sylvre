@@ -74,8 +74,22 @@ namespace Sylvre.WebAPI
                 c.OperationFilter<ReauthenticationHeaderFilter>();
             });
 
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var connectionStr = $"User ID={appSettings.SylApi_DbUser};" +
+                                $"Password={appSettings.SylApi_DbPassword};" +
+                                $"Server={appSettings.SylApi_DbServer};" +
+                                $"Port={appSettings.SylApi_DbPort};" +
+                                $"Database={appSettings.SylApi_DbName};" +
+                                $"Integrated Security=true;" +
+                                $"Pooling=true;";
+
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
                 opt.UseNpgsql(Configuration.GetConnectionString("SylvreWebApiDbConnection")));
+
 
             services.AddCors();
 
@@ -83,12 +97,7 @@ namespace Sylvre.WebAPI
             services.AddScoped<IUserService, UserService>();
 
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
+            var key = Encoding.ASCII.GetBytes(appSettings.SylApi_Secret);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer("AccessToken", options =>
             {
@@ -238,7 +247,7 @@ namespace Sylvre.WebAPI
                 c.InjectStylesheet("/api/swagger-ui/theme-flattop.css");
             });
 
-            string corsOrigin = Configuration.GetSection("AppSettings").Get<AppSettings>().CorsOrigin;
+            string corsOrigin = Configuration.GetSection("AppSettings").Get<AppSettings>().SylApi_CorsOrigin;
             app.UseCors(opt =>
                  opt.WithOrigins(corsOrigin)
                     .AllowAnyMethod()
@@ -256,7 +265,7 @@ namespace Sylvre.WebAPI
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             var appSettings = appSettingsSection.Get<AppSettings>();
-            foreach (string knownProxy in appSettings.KnownProxies.Split(','))
+            foreach (string knownProxy in appSettings.SylApi_KnownProxies.Split(','))
             {
                 if (IPAddress.TryParse(knownProxy, out IPAddress parsedAddress))
                 {

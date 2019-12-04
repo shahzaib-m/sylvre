@@ -8,10 +8,14 @@ services:
     ports:
       - ${API_PORT_ON_HOST}:80
     environment:
-      APPSETTINGS__SECRET: ${SYLVREWEBAPI_SECRET}
-      APPSETTINGS__CORSORIGIN: ${SYLVREWEBAPI_CORSORIGIN}
-      APPSETTINGS__COOKIEDOMAIN: ${SYLVREWEBAPI_COOKIEDOMAIN}
-      CONNECTIONSTRINGS__SYLVREWEBAPIDBCONNECTION: "User ID=sylvre-webapi;Password=password;Server=sylvre-webapi-db;Port=5432;Database=sylvre-webapi;Integrated Security=true;Pooling=true;"
+      APPSETTINGS__SYLAPI_SECRET: ${SYLVREWEBAPI_SECRET}
+      APPSETTINGS__SYLAPI_CORSORIGIN: ${SYLVREWEBAPI_CORSORIGIN}
+      APPSETTINGS__SYLAPI_COOKIEDOMAIN: ${SYLVREWEBAPI_COOKIEDOMAIN}
+      APPSETTINGS__SYLAPI_DBSERVER: "sylvre-webapi-db"
+      APPSETTINGS__SYLAPI_DBPORT: "5432"
+      APPSETTINGS__SYLAPI_DBNAME: "sylvre-webapi"
+      APPSETTINGS__SYLAPI_DBUSER: "sylvre-webapi"
+      APPSETTINGS__SYLAPI_DBPASSWORD: "password"
     depends_on:
       - "db"
     restart: always
