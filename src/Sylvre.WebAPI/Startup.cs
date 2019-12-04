@@ -88,7 +88,7 @@ namespace Sylvre.WebAPI
                                 $"Pooling=true;";
 
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
-                opt.UseNpgsql(Configuration.GetConnectionString("SylvreWebApiDbConnection")));
+                opt.UseNpgsql(connectionStr));
 
 
             services.AddCors();
