@@ -4,7 +4,6 @@
     {
         public string SylApi_Secret { get; set; }
         public string SylApi_KnownProxies { get; set; }
-        public string SylApi_CorsOrigin { get; set; }
         public string SylApi_CookieDomain { get; set; }
 
         public string SylApi_DbServer { get; set; }

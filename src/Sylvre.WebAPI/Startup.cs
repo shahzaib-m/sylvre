@@ -84,9 +84,6 @@ namespace Sylvre.WebAPI
             services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
                 opt.UseNpgsql(connectionStr));
 
-
-            services.AddCors();
-
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
 
@@ -240,13 +237,6 @@ namespace Sylvre.WebAPI
                 c.SwaggerEndpoint("/api/documentation/v1/docs.json", "Sylvre Web API V1");
                 c.InjectStylesheet("/api/swagger-ui/theme-flattop.css");
             });
-
-            string corsOrigin = Configuration.GetSection("AppSettings").Get<AppSettings>().SylApi_CorsOrigin;
-            app.UseCors(opt =>
-                 opt.WithOrigins(corsOrigin)
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
 
             // use forwarded headers from reverse proxies, accept from all private IP addresses and known exact proxies
             var forwardedHeadersOpts = new ForwardedHeadersOptions
