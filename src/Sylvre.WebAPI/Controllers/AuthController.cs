@@ -251,7 +251,6 @@ namespace Sylvre.WebAPI.Controllers
                 HttpOnly = true,
                 Secure = true,
                 IsEssential = true,
-                Domain = _appSettings.SylApi_CookieDomain,
                 SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax
             };
 
