@@ -2,6 +2,7 @@
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.ParserTests.JavaScript
 {
@@ -18,7 +19,7 @@ namespace Sylvre.Tests.Core.ParserTests.JavaScript
         public void Should_Provide_Parse_Error_When_Variable_Name_Has_Underscore_Prefixes(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsTrue(program.HasParseErrors);
+            ClassicAssert.IsTrue(program.HasParseErrors);
         }
     }
 }

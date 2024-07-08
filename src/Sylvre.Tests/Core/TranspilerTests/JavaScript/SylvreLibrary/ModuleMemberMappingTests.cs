@@ -1,6 +1,7 @@
 ﻿using Sylvre.Core.Transpilers.JavaScript.SylvreLibrary;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript.SylvreLibrary
 {
@@ -16,7 +17,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript.SylvreLibrary
         public void Should_Output_True_For_Valid_Sylvre_Module_Member(string module, string member)
         {
             bool exists = SylvreJavaScriptMappings.DoesSylvreMemberOfModuleExist(module, member);
-            Assert.IsTrue(exists);
+            ClassicAssert.IsTrue(exists);
         }
 
         [TestCase("Console", "nonexist")]
@@ -26,7 +27,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript.SylvreLibrary
         public void Should_Output_False_For_Invalid_Sylvre_Module_Member(string module, string member)
         {
             bool exists = SylvreJavaScriptMappings.DoesSylvreMemberOfModuleExist(module, member);
-            Assert.IsFalse(exists);
+            ClassicAssert.IsFalse(exists);
         }
 
         [TestCase("Console", "output", "log")]
@@ -36,7 +37,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript.SylvreLibrary
         {
             string output = SylvreJavaScriptMappings.GetEquivalentJavaScriptMemberOfModule(
                 module, member);
-            Assert.AreEqual(expected, output);
+            ClassicAssert.AreEqual(expected, output);
         }
     }
 }

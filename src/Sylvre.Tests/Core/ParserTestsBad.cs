@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 
 using Sylvre.Core;
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core
 {
@@ -24,8 +24,8 @@ namespace Sylvre.Tests.Core
         {
             SylvreProgram result = Parser.ParseSylvreInput(emptyInputVariations);
 
-            Assert.IsTrue(result.HasParseErrors);
-            Assert.AreEqual(1, result.ParseErrors.Count);
+            ClassicAssert.IsTrue(result.HasParseErrors);
+            ClassicAssert.AreEqual(1, result.ParseErrors.Count);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                Assert.IsTrue(result.HasParseErrors);
+                ClassicAssert.IsTrue(result.HasParseErrors);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                Assert.IsNotNull(result.ParseErrors);
+                ClassicAssert.IsNotNull(result.ParseErrors);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                Assert.AreEqual(3, result.ParseErrors.Count);
+                ClassicAssert.AreEqual(3, result.ParseErrors.Count);
             }
         }
 
@@ -85,10 +85,10 @@ namespace Sylvre.Tests.Core
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
                 SylvreParseError firstError = (SylvreParseError)result.ParseErrors.ElementAt(0);
-                Assert.IsFalse(firstError.IsMismatchedInput);
+                ClassicAssert.IsFalse(firstError.IsMismatchedInput);
                 StringAssert.Contains("create temp num_array", firstError.Message);
-                Assert.AreEqual(32, firstError.Line);
-                Assert.AreEqual(13, firstError.CharPositionInLine);
+                ClassicAssert.AreEqual(32, firstError.Line);
+                ClassicAssert.AreEqual(13, firstError.CharPositionInLine);
             }
         }
 
@@ -104,10 +104,10 @@ namespace Sylvre.Tests.Core
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
                 SylvreParseError secondError = (SylvreParseError)result.ParseErrors.ElementAt(1);
-                Assert.IsTrue(secondError.IsMismatchedInput);
-                Assert.AreEqual(";", secondError.Symbol);
-                Assert.AreEqual(46, secondError.Line);
-                Assert.AreEqual(17, secondError.CharPositionInLine);
+                ClassicAssert.IsTrue(secondError.IsMismatchedInput);
+                ClassicAssert.AreEqual(";", secondError.Symbol);
+                ClassicAssert.AreEqual(46, secondError.Line);
+                ClassicAssert.AreEqual(17, secondError.CharPositionInLine);
             }
         }
 
@@ -123,10 +123,10 @@ namespace Sylvre.Tests.Core
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
                 SylvreParseError thirdError = (SylvreParseError)result.ParseErrors.ElementAt(2);
-                Assert.IsFalse(thirdError.IsMismatchedInput);
+                ClassicAssert.IsFalse(thirdError.IsMismatchedInput);
                 StringAssert.Contains("quickSort", thirdError.Message);
-                Assert.AreEqual(53, thirdError.Line);
-                Assert.AreEqual(9, thirdError.CharPositionInLine);
+                ClassicAssert.AreEqual(53, thirdError.Line);
+                ClassicAssert.AreEqual(9, thirdError.CharPositionInLine);
             }
         }
     }
