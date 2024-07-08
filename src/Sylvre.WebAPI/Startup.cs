@@ -238,15 +238,12 @@ namespace Sylvre.WebAPI
                 c.InjectStylesheet("/api/swagger-ui/theme-flattop.css");
             });
 
-            // use forwarded headers from reverse proxies, accept from all private IP addresses and known exact proxies
+            // use forwarded headers from specific trusted proxies specified in config to get real client IPs,
+            // useful where IPs of clients are used (e.g. storing refresh token data to give users an overview of logged in sessions)
             var forwardedHeadersOpts = new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             };
-            forwardedHeadersOpts.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
-            forwardedHeadersOpts.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
-            forwardedHeadersOpts.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
-
             var appSettingsSection = Configuration.GetSection("AppSettings");
             var appSettings = appSettingsSection.Get<AppSettings>();
             foreach (string knownProxy in appSettings.SylApi_KnownProxies.Split(','))
