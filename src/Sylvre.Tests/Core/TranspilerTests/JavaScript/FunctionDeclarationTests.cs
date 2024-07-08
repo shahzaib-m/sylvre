@@ -2,6 +2,7 @@
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 {
@@ -24,7 +25,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Output_Valid_JavaScript_Function(string sylvreInput, string jsRegex)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -38,12 +39,12 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Not_Provide_Transpile_Errors(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
 
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
         }
 
         [TestCase(
@@ -61,12 +62,12 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Append_Two_Underscores_If_FuncName_Is_Reserved_Keyword(string sylvreInput, string regexToMatch)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
 
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
 
             StringAssert.IsMatch(regexToMatch, output.TranspiledCode);
         }

@@ -1,27 +1,24 @@
 ﻿using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
+using Microsoft.OpenApi.Models;
 using Microsoft.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using Newtonsoft.Json;
-
-using Swashbuckle.AspNetCore.Swagger;
 
 using Sylvre.WebAPI.Swagger;
 using Sylvre.WebAPI.Entities;
@@ -47,17 +44,14 @@ namespace Sylvre.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                             .AddJsonOptions(opt =>
-                             {
-                                 opt.SerializerSettings.Converters.Add(
-                                     new Newtonsoft.Json.Converters.StringEnumConverter());
-                                 opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                             });
+            services.AddMvc().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Sylvre Web API",
                     Version = "v1",
@@ -259,9 +253,9 @@ namespace Sylvre.WebAPI
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             };
-            forwardedHeadersOpts.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
-            forwardedHeadersOpts.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
-            forwardedHeadersOpts.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
+            forwardedHeadersOpts.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+            forwardedHeadersOpts.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+            forwardedHeadersOpts.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             var appSettings = appSettingsSection.Get<AppSettings>();

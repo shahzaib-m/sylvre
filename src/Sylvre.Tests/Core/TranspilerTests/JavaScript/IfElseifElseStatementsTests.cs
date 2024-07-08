@@ -2,6 +2,7 @@
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 {
@@ -17,7 +18,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         {
             string sylvreInput = "if (TRUE) < >";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -31,7 +32,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         {
             string sylvreInput = "if (TRUE) < > elseif (TRUE) < >";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -45,7 +46,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         {
             string sylvreInput = "if (TRUE) <> else < >";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);

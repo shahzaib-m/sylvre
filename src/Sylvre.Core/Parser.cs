@@ -16,7 +16,7 @@ namespace Sylvre.Core
         /// <returns>The generated Sylvre program.</returns>
         public static SylvreProgram ParseSylvreInput(string input)
         {
-            ICharStream inputStream = CharStreams.fromstring(input);
+            ICharStream inputStream = CharStreams.fromString(input);
             ITokenSource lexer = new SylvreLexer(inputStream);
             ITokenStream tokens = new CommonTokenStream(lexer);
 

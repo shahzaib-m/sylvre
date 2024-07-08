@@ -2,6 +2,7 @@
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 {
@@ -27,7 +28,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Output_Valid_JavaScript_Expression(string sylvreInput, string jsRegex)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -41,7 +42,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
             string sylvreInput = "increment var#";
             string jsRegex = @"""use strict"";\+\+.*__var[n ]*;";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -54,7 +55,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
             string sylvreInput = "var increment#";
             string jsRegex = @"""use strict"";__var.*\+\+[n ]*;";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -68,7 +69,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
             string sylvreInput = "decrement var#";
             string jsRegex = @"""use strict"";--.*__var[n ]*;";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
@@ -81,7 +82,7 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
             string sylvreInput = "var decrement#";
             string jsRegex = @"""use strict"";__var.*--[n ]*;";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);

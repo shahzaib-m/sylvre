@@ -88,7 +88,7 @@ namespace Sylvre.WebAPI.Services
         public Task<User> RetrieveAsync(int id)
         {
             // find and return a user by id
-            return _context.Users.FindAsync(id);
+            return _context.Users.FindAsync(id).AsTask();
         }
         /// <summary>
         /// Retrieves a list of all user entities.

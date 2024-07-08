@@ -4,6 +4,7 @@ using Sylvre.Core;
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 {
@@ -23,11 +24,11 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Output_Valid_JavaScript_Console_Output(string sylvreInput, string jsRegex)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
 
             StringAssert.IsMatch(jsRegex, output.TranspiledCode);
         }
@@ -39,13 +40,13 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Give_Error_When_Index_Reference_After_Sylvre_Library_Ref(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
 
-            Assert.AreEqual("An index reference is not allowed after the library reference.",
+            ClassicAssert.AreEqual("An index reference is not allowed after the library reference.",
                 output.TranspileErrors.First().Message);
         }
 
@@ -56,13 +57,13 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Give_Error_When_Index_Reference_After_Module_Ref(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
 
-            Assert.AreEqual("An index reference is not allowed after a module reference.",
+            ClassicAssert.AreEqual("An index reference is not allowed after a module reference.",
                 output.TranspileErrors.First().Message);
         }
 
@@ -72,13 +73,13 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Give_Error_When_No_Module_Ref_After_Library_Ref(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
 
-            Assert.AreEqual("Missing a module name after the library reference.",
+            ClassicAssert.AreEqual("Missing a module name after the library reference.",
                 output.TranspileErrors.First().Message);
         }
 
@@ -88,13 +89,13 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Give_Error_When_No_Member_Ref_After_Module_Ref(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
 
-            Assert.AreEqual("Missing a module member reference after module name.",
+            ClassicAssert.AreEqual("Missing a module member reference after module name.",
                 output.TranspileErrors.First().Message);
         }
 
@@ -104,13 +105,13 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Give_Error_When_Invalid_Module_Ref_Is_Used(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
 
-            Assert.AreEqual("This Sylvre module does not exist.",
+            ClassicAssert.AreEqual("This Sylvre module does not exist.",
                 output.TranspileErrors.First().Message);
         }
 
@@ -120,13 +121,13 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Give_Error_When_Invalid_Module_Member_Ref_Is_Used(string sylvreInput)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
 
-            Assert.AreEqual("This Sylvre module member does not exist.",
+            ClassicAssert.AreEqual("This Sylvre module member does not exist.",
                 output.TranspileErrors.First().Message);
         }
     }

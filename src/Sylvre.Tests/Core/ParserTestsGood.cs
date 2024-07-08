@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 
 using Sylvre.Core;
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core
 {
@@ -27,7 +27,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                Assert.IsFalse(result.HasParseErrors);
+                ClassicAssert.IsFalse(result.HasParseErrors);
             }
         }
 
@@ -42,7 +42,7 @@ namespace Sylvre.Tests.Core
             {
                 SylvreProgram result = Parser.ParseSylvreInput(reader.ReadToEnd());
 
-                Assert.AreEqual(0, result.ParseErrors.Count);
+                ClassicAssert.AreEqual(0, result.ParseErrors.Count);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Sylvre.Tests.Core
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                Assert.IsNotNull(Parser.ParseSylvreInput(reader.ReadToEnd()));
+                ClassicAssert.IsNotNull(Parser.ParseSylvreInput(reader.ReadToEnd()));
             }
         }
 
@@ -68,7 +68,7 @@ namespace Sylvre.Tests.Core
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                Assert.IsInstanceOf(typeof(SylvreProgram), 
+                ClassicAssert.IsInstanceOf(typeof(SylvreProgram), 
                     Parser.ParseSylvreInput(reader.ReadToEnd()));
             }
         }

@@ -2,6 +2,7 @@
 using Sylvre.Core.Models;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
 {
@@ -17,12 +18,12 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         {
             string sylvreInput = "\nSylvre = 25.21#";
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
 
-            Assert.IsTrue(output.HasTranspileErrors);
+            ClassicAssert.IsTrue(output.HasTranspileErrors);
         }
 
         [TestCase(
@@ -37,11 +38,11 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Output_Valid_JavaScript_Variable_Assignment(string sylvreInput, string regexToMatch)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
 
             StringAssert.IsMatch(regexToMatch, output.TranspiledCode);
         }
@@ -61,12 +62,12 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Append_Two_Underscores_If_Is_Reserved_Keyword(string sylvreInput, string regexToMatch)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
 
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
 
             StringAssert.IsMatch(regexToMatch, output.TranspiledCode);
         }
@@ -86,12 +87,12 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Output_Valid_JavaScript_Assignment_Operator(string sylvreInput, string regexToMatch)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
 
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
 
             StringAssert.IsMatch(regexToMatch, output.TranspiledCode);
         }
@@ -111,12 +112,12 @@ namespace Sylvre.Tests.Core.TranspilerTests.JavaScript
         public void Should_Output_Valid_JavaScript_Array_Assignment(string sylvreInput, string regexToMatch)
         {
             SylvreProgram program = Parser.ParseSylvreInput(sylvreInput);
-            Assert.IsFalse(program.HasParseErrors);
+            ClassicAssert.IsFalse(program.HasParseErrors);
 
             TranspileOutputBase output = Transpiler.TranspileSylvreToTarget(
                 program, TargetLanguage.Javascript);
 
-            Assert.IsFalse(output.HasTranspileErrors);
+            ClassicAssert.IsFalse(output.HasTranspileErrors);
 
             StringAssert.IsMatch(regexToMatch, output.TranspiledCode);
         }
