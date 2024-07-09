@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
 
+using Sylvre.WebAPI.Controllers;
+
 namespace Sylvre.WebAPI.Swagger
 {
     public class ReauthenticationHeaderFilter : IOperationFilter
@@ -17,16 +19,19 @@ namespace Sylvre.WebAPI.Swagger
 
             bool allowAnonymous = context.MethodInfo.GetCustomAttributes(true)
                 .OfType<AllowAnonymousAttribute>().Any();
-
-            if (!allowAnonymous && 
-               ((operation.OperationId == "DeleteUser" ) || (operation.OperationId == "ChangePassword")))
+            var unsafeOperationNames = new List<string>
+            {
+                nameof(UsersController.DeleteUser),
+                nameof(UsersController.ChangePassword)
+            };
+            if (!allowAnonymous && unsafeOperationNames.Contains(operation.OperationId))
             {
                 operation.Parameters.Add(new OpenApiParameter
                 {
                     Name = "Sylvre-Reauthenticate-Pass",
                     In = ParameterLocation.Header,
-                    Required = true,
-                    Description = "The base64 encoded password of the authenticated user/identity (password re-authentication for unsafe endpoints).",
+                    Required = false,
+                    Description = "The base64 encoded password of the authenticated user/identity (unsafe endpoints require password re-authentication for non-admins).",
                 });
             }
         }

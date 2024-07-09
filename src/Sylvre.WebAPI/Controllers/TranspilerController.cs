@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Sylvre.Core;
 
 using Sylvre.WebAPI.Data;
+using Sylvre.WebAPI.Data.Enums;
 
 namespace Sylvre.WebAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace Sylvre.WebAPI.Controllers
             if (program.HasParseErrors)
             {
                 response.HasErrors = true;
-                response.ErrorSource = TranspileResponseErrorSource.Parser;
+                response.ErrorSource = TranspileResponseErrorType.Parser;
                 response.Errors = program.ParseErrors;
 
                 return Ok(response);
@@ -41,7 +42,7 @@ namespace Sylvre.WebAPI.Controllers
             if (output.HasTranspileErrors)
             {
                 response.HasErrors = true;
-                response.ErrorSource = TranspileResponseErrorSource.Transpiler;
+                response.ErrorSource = TranspileResponseErrorType.Transpiler;
                 response.Errors = output.TranspileErrors;
 
                 return Ok(response);

@@ -157,7 +157,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="403">The current user is deleting another user id and is not an admin.</response>
         /// <response code="404">User to delete was not found by their id.</response>
         /// <returns>204 No Content response.</returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = nameof(DeleteUser))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
@@ -207,13 +207,13 @@ namespace Sylvre.WebAPI.Controllers
         /// Changes the password of a user by id (unsafe - re-authentication required for standard user).
         /// </summary>
         /// <param name="id">The id of the user to update the password for.</param>
-        /// <param name="changePasswordRequest">THe request containing the new password to set for this user.</param>
+        /// <param name="changePasswordRequest">The request containing the new password to set for this user.</param>
         /// <response code="204">Successfully updated the password for this user.</response>
         /// <response code="400">Re-authentication header wasn't provided, was invalid base64, or failed because of invalid current password.</response>
         /// <response code="403">The current user is updating another user id and is not an admin.</response>
         /// <response code="404">User to update the password for was not found by their id.</response>
         /// <returns>204 No Content response.</returns>
-        [HttpPut("{id}/password")]
+        [HttpPut("{id}/password", Name = nameof(ChangePassword))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]

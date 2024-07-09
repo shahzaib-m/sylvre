@@ -36,7 +36,7 @@ namespace Sylvre.Core.Transpilers.JavaScript
         /// <summary>
         /// Checks to see if the given input is a reserved JavaScript keyword.
         /// </summary>
-        /// <param name="input">THe input string to check.</param>
+        /// <param name="input">The input string to check.</param>
         /// <returns>True if input is a reserved JavaScript keyword, false otherwise.</returns>
         public static bool IsReservedKeyword(string input)
         {

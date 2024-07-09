@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Text;
-using System.Security.Claims;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 using Microsoft.Net.Http.Headers;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 
 using Sylvre.WebAPI.Data;
+using Sylvre.WebAPI.Data.Enums;
+
 using Sylvre.WebAPI.Entities;
 using Sylvre.WebAPI.Services;
 
@@ -49,7 +48,7 @@ namespace Sylvre.WebAPI.Controllers
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
         [AllowAnonymous]
-        public async Task<ActionResult<AuthResponse>> Login([FromQuery] AuthStrategy strategy,
+        public async Task<ActionResult<AuthResponse>> Login([FromQuery] AuthStrategyType strategy,
             [FromBody] AuthRequest credentials)
         {
             var authenticatedUser = await _authService.AuthenticateAsync(
@@ -58,31 +57,32 @@ namespace Sylvre.WebAPI.Controllers
             if (authenticatedUser == null)
                 return Unauthorized(new { Message = "Unauthorized" });
 
-            JwtSecurityToken accessToken = GenerateJwtToken(authenticatedUser.Id,
-                    authenticatedUser.IsAdmin, JwtTokenType.AccessToken);
-            JwtSecurityToken refreshToken = GenerateJwtToken(authenticatedUser.Id,
-                    authenticatedUser.IsAdmin, JwtTokenType.RefreshToken);
-
             string ipAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             string userAgent = Request.Headers[HeaderNames.UserAgent];
-            await _authService.CreateRefreshTokenUnderUserByIdAsync(refreshToken.RawSignature,
-                authenticatedUser.Id, ipAddress, userAgent);
 
-            if (strategy == AuthStrategy.Token)
+            double accessTokenExpiryMinutes = double.Parse(_configuration["AccessTokenExpiryMinutes"]);
+            double refreshTokenExpiryMinutes = double.Parse(_configuration["RefreshTokenExpiryMinutes"]);
+            DateTime accessTokenExpiryUtc = DateTime.UtcNow.AddMinutes(accessTokenExpiryMinutes);
+            DateTime refreshTokenExpiryUtc = DateTime.UtcNow.AddMinutes(refreshTokenExpiryMinutes);
+            string accessToken = _authService.GenerateAccessTokenAsync(authenticatedUser, accessTokenExpiryUtc);
+            string refreshToken = await _authService.GenerateAndStoreRefreshTokenAsync(authenticatedUser,
+                ipAddress, userAgent, refreshTokenExpiryUtc);
+
+            if (strategy == AuthStrategyType.Token)
             {
                 return Ok(new AuthResponse
                 {
                     UserId = authenticatedUser.Id,
-                    AccessToken = WriteJwtSecurityTokenToString(accessToken),
-                    RefreshToken = WriteJwtSecurityTokenToString(refreshToken)
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
                 });
             }
             else
             {
-                Response.Cookies.Append("access-token", WriteJwtSecurityTokenToString(accessToken),
-                    GenerateCookieOptions(JwtTokenType.AccessToken, isCookieDelete: false));
-                Response.Cookies.Append("refresh-token", WriteJwtSecurityTokenToString(refreshToken),
-                    GenerateCookieOptions(JwtTokenType.RefreshToken, isCookieDelete: false));
+                Response.Cookies.Append("access-token", accessToken,
+                    GenerateTokenCookieOptions(accessTokenExpiryUtc));
+                Response.Cookies.Append("refresh-token", refreshToken,
+                    GenerateTokenCookieOptions(refreshTokenExpiryUtc));
 
                 return Ok(new AuthResponse
                 {
@@ -98,52 +98,52 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="200">Authentication successful and user id, access token, and refresh token returned.</response>
         /// <response code="401">Unauthorized as refresh token was invalid.</response>
         /// <returns>The user id, access token, and refresh token.</returns>
-        [HttpPost("refresh")]
+        [HttpPost("refresh", Name = nameof(Refresh))]
         [ProducesResponseType(typeof(AuthResponse), 200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult<AuthResponse>> Refresh([FromQuery] AuthStrategy strategy)
+        public async Task<ActionResult<AuthResponse>> Refresh([FromQuery] AuthStrategyType strategy)
         {
             int userId = int.Parse(User.Identity.Name);
             User user = await _userService.RetrieveAsync(userId);
-
-            string refreshTokenSignature = User.FindFirst("refresh-token-signature")?.Value;
-            RefreshToken userRefreshToken = await _authService.GetRefreshTokenOfUserBySignatureAsync(
-                refreshTokenSignature, userId);
-
-            if (userRefreshToken == null || userRefreshToken.IsExpired == true)
-            {
+            if (user == null)
                 return Unauthorized();
-            }
 
-            await _authService.DeleteRefreshTokenAsync(userRefreshToken);
+            string tokenId = User.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
+            if (tokenId == null)
+                return Unauthorized();
 
+            RefreshToken storedRefreshToken = await _authService.GetRefreshTokenById(tokenId);
+            if (storedRefreshToken == null || DateTime.UtcNow > storedRefreshToken.ExpiryUtc)
+                return Unauthorized();
 
-            JwtSecurityToken accessToken = GenerateJwtToken(user.Id,
-                    user.IsAdmin, JwtTokenType.AccessToken);
-            JwtSecurityToken refreshToken = GenerateJwtToken(user.Id,
-                    user.IsAdmin, JwtTokenType.RefreshToken);
+            await _authService.DeleteRefreshTokenAsync(storedRefreshToken);
 
             string ipAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
             string userAgent = Request.Headers[HeaderNames.UserAgent];
-            await _authService.CreateRefreshTokenUnderUserByIdAsync(refreshToken.RawSignature,
-                user.Id, ipAddress, userAgent);
 
-            
-            if (strategy == AuthStrategy.Token)
+            double accessTokenExpiryMinutes = double.Parse(_configuration["AccessTokenExpiryMinutes"]);
+            double refreshTokenExpiryMinutes = double.Parse(_configuration["RefreshTokenExpiryMinutes"]);
+            DateTime accessTokenExpiryUtc = DateTime.UtcNow.AddMinutes(accessTokenExpiryMinutes);
+            DateTime refreshTokenExpiryUtc = DateTime.UtcNow.AddMinutes(refreshTokenExpiryMinutes);
+            string accessToken = _authService.GenerateAccessTokenAsync(user, accessTokenExpiryUtc);
+            string refreshToken = await _authService.GenerateAndStoreRefreshTokenAsync(user,
+                ipAddress, userAgent, refreshTokenExpiryUtc);
+
+            if (strategy == AuthStrategyType.Token)
             {
                 return Ok(new AuthResponse
                 {
                     UserId = user.Id,
-                    AccessToken = WriteJwtSecurityTokenToString(accessToken),
-                    RefreshToken = WriteJwtSecurityTokenToString(refreshToken)
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
                 });
             }
             else
             {
-                Response.Cookies.Append("access-token", WriteJwtSecurityTokenToString(accessToken),
-                    GenerateCookieOptions(JwtTokenType.AccessToken, isCookieDelete: false));
-                Response.Cookies.Append("refresh-token", WriteJwtSecurityTokenToString(refreshToken),
-                    GenerateCookieOptions(JwtTokenType.RefreshToken, isCookieDelete: false));
+                Response.Cookies.Append("access-token", accessToken,
+                    GenerateTokenCookieOptions(accessTokenExpiryUtc));
+                Response.Cookies.Append("refresh-token", refreshToken,
+                    GenerateTokenCookieOptions(refreshTokenExpiryUtc));
 
                 return Ok(new AuthResponse
                 {
@@ -158,109 +158,48 @@ namespace Sylvre.WebAPI.Controllers
         /// <response code="204">Authentication successful and refresh token deleted.</response>
         /// <response code="401">Unauthorized as refresh token was invalid.</response>
         /// <returns>204 No Content response.</returns>
-        [HttpDelete("logout")]
+        [HttpDelete("logout", Name = nameof(Logout))]
         [ProducesResponseType(204)]
         [ProducesResponseType(401)]
         public async Task<ActionResult> Logout()
         {
             int userId = int.Parse(User.Identity.Name);
             User user = await _userService.RetrieveAsync(userId);
+            if (user == null)
+                return Unauthorized();
 
-            string refreshTokenSignature = User.FindFirst("refresh-token-signature")?.Value;
-            RefreshToken userRefreshToken = await _authService.GetRefreshTokenOfUserBySignatureAsync(
-                refreshTokenSignature, userId);
+            string tokenId = User.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
+            if (tokenId == null)
+                return Unauthorized();
 
-            if (userRefreshToken == null || userRefreshToken.IsExpired == true)
-            {
-                return NoContent();
-            }
+            RefreshToken storedRefreshToken = await _authService.GetRefreshTokenById(tokenId);
+            if (storedRefreshToken == null || DateTime.UtcNow > storedRefreshToken.ExpiryUtc)
+                return Unauthorized();
 
-            await _authService.DeleteRefreshTokenAsync(userRefreshToken);
+            await _authService.DeleteRefreshTokenAsync(storedRefreshToken);
 
-            Response.Cookies.Delete("access-token", GenerateCookieOptions(
-                JwtTokenType.AccessToken, isCookieDelete: true));
-            Response.Cookies.Delete("refresh-token", GenerateCookieOptions(
-                JwtTokenType.RefreshToken, isCookieDelete: true));
+            Response.Cookies.Delete("access-token");
+            Response.Cookies.Delete("refresh-token");
 
             return NoContent();
         }
 
-
         /// <summary>
-        /// The possible types of a JWT token to generate.
+        /// Builds the cookie options for auth tokens.
         /// </summary>
-        private enum JwtTokenType { AccessToken, RefreshToken }
-
-        /// <summary>
-        /// Generates a JWT token for the given user by id.
-        /// </summary>
-        /// <param name="userId">The id of the user to generate the access token for.</param>
-        /// <param name="IsAdmin">Whether the user is an administrator or not.</param>
-        /// <param name="tokenType">The type of the JWT token to generate.</param>
-        /// <returns>The generated JWT token.</returns>
-        private JwtSecurityToken GenerateJwtToken(int userId, bool IsAdmin, JwtTokenType tokenType)
-        {
-            var secretAsBytes = Encoding.UTF8.GetBytes(_configuration["AppSecret"]);
-            var symmetricSecurityKey = new SymmetricSecurityKey(secretAsBytes);
-
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey,
-                SecurityAlgorithms.HmacSha256Signature);
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userId.ToString()),
-                new Claim(ClaimTypes.Role, IsAdmin ? "Admin" : "User")
-            };
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = tokenType == JwtTokenType.AccessToken ? DateTime.UtcNow.AddMinutes(15)
-                    : DateTime.UtcNow.AddDays(14),
-                SigningCredentials = signingCredentials,
-                Issuer = "sylvre-webapi",
-                Audience = tokenType == JwtTokenType.AccessToken ? "sylvre-webapi-client-access-token"
-                    : "sylvre-webapi-client-refresh-token"
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.CreateToken(tokenDescriptor) as JwtSecurityToken;
-        }
-
-        /// <summary>
-        /// Writes a JwtSecurityToken to a string.
-        /// </summary>
-        /// <param name="token">The JWT token to write.</param>
-        /// <returns>The JWT token string.</returns>
-        private string WriteJwtSecurityTokenToString(JwtSecurityToken token)
-        {
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        /// <summary>
-        /// Builds the cookie options for the specified token type.
-        /// </summary>
-        /// <param name="tokenType">The type of the JWT token to generate the cookie options for.</param>
-        /// <param name="isCookieDelete">Whether the cookie is being deleted or not.</param>
+        /// <param name="expiryUtc">When this cookie expires.</param>
         /// <returns>The generated cookie options.</returns>
-        private CookieOptions GenerateCookieOptions(JwtTokenType tokenType, bool isCookieDelete)
+        private static CookieOptions GenerateTokenCookieOptions(DateTime expiryUtc)
         {
-            var cookieOptions = new CookieOptions
+            return new CookieOptions
             {
                 Path = "/",
                 HttpOnly = true,
                 Secure = true,
                 IsEssential = true,
+                Expires = expiryUtc,
                 SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax
             };
-
-            if (!isCookieDelete)
-            {
-                cookieOptions.Expires = tokenType == JwtTokenType.AccessToken ? DateTime.UtcNow.AddMinutes(15)
-                    : DateTime.UtcNow.AddDays(14);
-            }
-
-            return cookieOptions;
         }
     }
 }

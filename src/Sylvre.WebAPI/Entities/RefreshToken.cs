@@ -1,11 +1,12 @@
-﻿namespace Sylvre.WebAPI.Entities
+﻿using System;
+
+namespace Sylvre.WebAPI.Entities
 {
     public class RefreshToken
     {
         public int Id { get; set; }
-
-        public string Signature { get; set; }
-        public bool IsExpired { get; set; }
+        public string TokenIdHash { get; set; }
+        public DateTime ExpiryUtc { get; set; }
 
         public string UserAgent { get; set; }
         public string IpAddress { get; set; }

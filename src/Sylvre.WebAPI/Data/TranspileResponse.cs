@@ -3,13 +3,10 @@
 using Sylvre.Core;
 using Sylvre.Core.Models;
 
+using Sylvre.WebAPI.Data.Enums;
+
 namespace Sylvre.WebAPI.Data
 {
-    /// <summary>
-    /// Represents the possible source of errors during the transpiling request.
-    /// </summary>
-    public enum TranspileResponseErrorSource { None, Parser, Transpiler }
-    
     /// <summary>
     /// Represents the transpile response sent back to the client after a transpile request.
     /// </summary>
@@ -22,7 +19,7 @@ namespace Sylvre.WebAPI.Data
         /// <summary>
         /// The source of the errors, either by the parser during parsing, or by the transpiler after parsing.
         /// </summary>
-        public TranspileResponseErrorSource ErrorSource { get; set; } = TranspileResponseErrorSource.None;
+        public TranspileResponseErrorType ErrorSource { get; set; } = TranspileResponseErrorType.None;
         /// <summary>
         /// The list of all errors.
         /// </summary>
