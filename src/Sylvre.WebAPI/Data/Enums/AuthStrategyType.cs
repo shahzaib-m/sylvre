@@ -1,7 +1,7 @@
-﻿namespace Sylvre.WebAPI.Data
+﻿namespace Sylvre.WebAPI.Data.Enums
 {
     /// <summary>
     /// The possible authentication strategies.
     /// </summary>
-    public enum AuthStrategy { Token, Cookie }
+    public enum AuthStrategyType { Token, Cookie }
 }

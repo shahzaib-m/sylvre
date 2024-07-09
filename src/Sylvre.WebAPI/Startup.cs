@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using System.Net;
 using System.Text;
-using System.Text.Json.Serialization;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Serialization;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
@@ -24,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Sylvre.WebAPI.Swagger;
 using Sylvre.WebAPI.Entities;
 using Sylvre.WebAPI.Services;
+using Sylvre.WebAPI.Data.Enums;
 
 namespace Sylvre.WebAPI
 {
@@ -34,7 +33,7 @@ namespace Sylvre.WebAPI
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile($"appsettings.${env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -65,7 +64,24 @@ namespace Sylvre.WebAPI
                 string webApiDoc = Path.Combine(System.AppContext.BaseDirectory, "Sylvre.WebAPI.xml");
                 c.IncludeXmlComments(webApiDoc, includeControllerXmlComments: true);
 
-                c.OperationFilter<AuthHeaderFilter>();
+                c.AddSecurityDefinition("access-token", new OpenApiSecurityScheme
+                {
+                    Name = "Access token",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer"
+                });
+                c.AddSecurityDefinition("refresh-token", new OpenApiSecurityScheme
+                {
+                    Name = "Refresh token",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer"
+                });
+
+                c.OperationFilter<AuthenticationRequirementsFilter>();
                 c.OperationFilter<ReauthenticationHeaderFilter>();
             });
 
@@ -82,123 +98,63 @@ namespace Sylvre.WebAPI
             services.AddScoped<IUserService, UserService>();
 
             var key = Encoding.ASCII.GetBytes(Configuration["AppSecret"]);
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer("AccessToken", options =>
+            services.AddAuthentication(options =>
             {
-                options.Events = new JwtBearerEvents
-                {
-                    // custom response for missing token/cookie instead of empty response body
-                    // https://stackoverflow.com/questions/38281116/custom-401-and-403-response-model-with-usejwtbearerauthentication-middleware
-                    OnChallenge = async context =>
-                    {
-                        context.Response.StatusCode = 401;
-                        context.Response.Headers.Append(HeaderNames.WWWAuthenticate,
-                            context.Options.Challenge);
-
-                        context.Response.Headers.Append(HeaderNames.ContentType,
-                            "application/json");
-
-                        await context.Response.WriteAsync("{ \"message\": \"Unauthorized\" }");
-
-                        context.HandleResponse();
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        // if the user is authenticating via a cookie (browsers/web-apps), use that token
-                        if (context.Request.Cookies.ContainsKey("access-token"))
-                            context.Token = context.Request.Cookies["access-token"];
-
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = async context =>
-                    {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
-                        var userEntity = await userService.RetrieveAsync(userId);
-                        if (userEntity == null)
-                        {
-                            context.Fail("Unauthorized");
-                        }
-
-                        return;
-                    }
-                };
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidIssuer = "sylvre-webapi",
-                    ValidAudience = "sylvre-webapi-client-access-token"
-                };
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer("AccessToken", options =>
+            {
+                ConfigureJwtBearerOptions(options, AuthTokenType.Access, key);
+            })
+            .AddJwtBearer("RefreshToken", options =>
+            {
+                ConfigureJwtBearerOptions(options, AuthTokenType.Refresh, key);
             });
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer("RefreshToken", options =>
+        }
+
+        private static void ConfigureJwtBearerOptions(JwtBearerOptions options, AuthTokenType tokenType, byte[] key)
+        {
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
                 {
-                    options.Events = new JwtBearerEvents
+                    // attach access/refresh token to the context from the relevant cookie if they are using cookie auth strategy
+                    switch (tokenType)
                     {
-                        // custom response for missing token/cookie instead of empty response body
-                        // https://stackoverflow.com/questions/38281116/custom-401-and-403-response-model-with-usejwtbearerauthentication-middleware
-                        OnChallenge = async context =>
-                        {
-                            context.Response.StatusCode = 401;
-                            context.Response.Headers.Append(HeaderNames.WWWAuthenticate,
-                                context.Options.Challenge);
-
-                            context.Response.Headers.Append(HeaderNames.ContentType,
-                                "application/json");
-
-                            await context.Response.WriteAsync("{ \"message\": \"Unauthorized\" }");
-
-                            context.HandleResponse();
-                        },
-                        OnMessageReceived = context =>
-                        {
-                            // if the user is authenticating via a cookie (browsers/web-apps), use that token
+                        case AuthTokenType.Access:
+                            if (context.Request.Cookies.ContainsKey("access-token"))
+                                context.Token = context.Request.Cookies["access-token"];
+                            break;
+                        case AuthTokenType.Refresh:
                             if (context.Request.Cookies.ContainsKey("refresh-token"))
                                 context.Token = context.Request.Cookies["refresh-token"];
+                            break;
+                    }
 
-                            return Task.CompletedTask;
-                        },
-                        OnTokenValidated = async context =>
-                        {
-                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            var userId = int.Parse(context.Principal.Identity.Name);
-                            var userEntity = await userService.RetrieveAsync(userId);
-                            if (userEntity == null)
-                            {
-                                context.Fail("Unauthorized");
-                            }
-
-                            // adding the raw signature of the refresh token for use in the /auth/refresh action
-                            var refreshToken = context.SecurityToken as JwtSecurityToken;
-                            if (refreshToken != null)
-                            {
-                                ClaimsIdentity identity = context.Principal.Identity as ClaimsIdentity;
-                                if (identity != null)
-                                {
-                                    identity.AddClaim(new Claim("refresh-token-signature", refreshToken.RawSignature));
-                                }
-                            }
-
-                            return;
-                        }
-                    };
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidateAudience = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidIssuer = "sylvre-webapi",
-                        ValidAudience = "sylvre-webapi-client-refresh-token"
-                    };
-                });
+                    return Task.CompletedTask;
+                },
+                OnChallenge = async context =>
+                {
+                    // client tried to reach an unauthenticated endpoint without the required token
+                    context.Response.StatusCode = 401;
+                    context.Response.Headers.Append(HeaderNames.WWWAuthenticate, context.Options.Challenge);
+                    context.Response.Headers.Append(HeaderNames.ContentType, "application/json");
+                    await context.Response.WriteAsync("{ \"message\": \"Unauthorized\" }");
+                    context.HandleResponse();
+                }
+            };
+            options.RequireHttpsMetadata = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidIssuer = "sylvre",
+                ValidAudience = "sylvre-clients",
+            };
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

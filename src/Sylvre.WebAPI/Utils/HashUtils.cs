@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Security.Cryptography;
 
 namespace Sylvre.WebAPI.Utils
@@ -44,6 +45,20 @@ namespace Sylvre.WebAPI.Utils
                 }
 
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Generates a consistent hash from a given string.
+        /// </summary>
+        /// <param name="str">The string to hash.</param>
+        /// <returns>The hashed value.</returns>
+        public static string GenerateConsistentHashFromString(string str)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(str));
+                return Convert.ToBase64String(hashedBytes);
             }
         }
     }
