@@ -42,12 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sylvre.WebAPI.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\api\swagger-ui\theme-flattop.css" />
   </ItemGroup>
 
