@@ -69,16 +69,11 @@ namespace Sylvre.WebAPI
                 c.OperationFilter<ReauthenticationHeaderFilter>();
             });
 
-
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var connectionStr = $"User ID={appSettings.SylApi_DbUser};" +
-                                $"Password={appSettings.SylApi_DbPassword};" +
-                                $"Server={appSettings.SylApi_DbServer};" +
-                                $"Port={appSettings.SylApi_DbPort};" +
-                                $"Database={appSettings.SylApi_DbName};" +
+            var connectionStr = $"User ID={Configuration["DbUser"]};" +
+                                $"Password={Configuration["DbPassword"]};" +
+                                $"Server={Configuration["DbServer"]};" +
+                                $"Port={Configuration["DbPort"]};" +
+                                $"Database={Configuration["DbName"]};" +
                                 $"Integrated Security=true;" +
                                 $"Pooling=true;";
 
@@ -89,7 +84,7 @@ namespace Sylvre.WebAPI
             services.AddScoped<IUserService, UserService>();
 
 
-            var key = Encoding.ASCII.GetBytes(appSettings.SylApi_Secret);
+            var key = Encoding.ASCII.GetBytes(Configuration["AppSecret"]);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer("AccessToken", options =>
             {
@@ -219,7 +214,6 @@ namespace Sylvre.WebAPI
                 serviceScope.ServiceProvider.GetService<SylvreWebApiContext>()
                     .Database.Migrate();
             }
-            //
 
             if (env.IsDevelopment())
             {
@@ -239,23 +233,23 @@ namespace Sylvre.WebAPI
                 c.InjectStylesheet("/api/swagger-ui/theme-flattop.css");
             });
 
-            // use forwarded headers from specific trusted proxies specified in config to get real client IPs,
-            // useful where IPs of clients are used (e.g. storing refresh token data to give users an overview of logged in sessions)
-            var forwardedHeadersOpts = new ForwardedHeadersOptions
+            if (!string.IsNullOrWhiteSpace(Configuration["TrustedProxies"]))
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            };
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            foreach (string knownProxy in appSettings.SylApi_KnownProxies.Split(','))
-            {
-                if (IPAddress.TryParse(knownProxy, out IPAddress parsedAddress))
+                // use forwarded headers from specific trusted proxies specified in config to get real client IPs,
+                // useful where IPs of clients are used (e.g. storing refresh token data to give users an overview of logged in sessions)
+                var forwardedHeadersOpts = new ForwardedHeadersOptions
                 {
-                    forwardedHeadersOpts.KnownProxies.Add(parsedAddress);
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                };
+                foreach (string knownProxy in Configuration["TrustedProxies"].Split(','))
+                {
+                    if (IPAddress.TryParse(knownProxy, out IPAddress parsedAddress))
+                    {
+                        forwardedHeadersOpts.KnownProxies.Add(parsedAddress);
+                    }
                 }
+                app.UseForwardedHeaders(forwardedHeadersOpts);
             }
-            app.UseForwardedHeaders(forwardedHeadersOpts);
-            //
 
             app.UseAuthentication();
 

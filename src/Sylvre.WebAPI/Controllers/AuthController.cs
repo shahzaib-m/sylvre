@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.Net.Http.Headers;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 
 using Sylvre.WebAPI.Data;
 using Sylvre.WebAPI.Entities;
@@ -26,15 +26,15 @@ namespace Sylvre.WebAPI.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
-        private readonly AppSettings _appSettings;
+        private readonly IConfiguration _configuration;
 
         public AuthController(IAuthService authService,
                               IUserService userService,
-                              IOptions<AppSettings> appSettings)
+                              IConfiguration configuration)
         {
             _authService = authService;
             _userService = userService;
-            _appSettings = appSettings.Value;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Sylvre.WebAPI.Controllers
         /// <returns>The generated JWT token.</returns>
         private JwtSecurityToken GenerateJwtToken(int userId, bool IsAdmin, JwtTokenType tokenType)
         {
-            var secretAsBytes = Encoding.UTF8.GetBytes(_appSettings.SylApi_Secret);
+            var secretAsBytes = Encoding.UTF8.GetBytes(_configuration["AppSecret"]);
             var symmetricSecurityKey = new SymmetricSecurityKey(secretAsBytes);
 
             var signingCredentials = new SigningCredentials(symmetricSecurityKey,
