@@ -15,6 +15,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4.1.7
 
+    - name: Install xmlstarlet
+      run: sudo apt-get install -y xmlstarlet
+
     - name: Extract version
       id: get_version
       run: |
