@@ -74,7 +74,6 @@ namespace Sylvre.WebAPI
                                 $"Server={Configuration["DbServer"]};" +
                                 $"Port={Configuration["DbPort"]};" +
                                 $"Database={Configuration["DbName"]};" +
-                                $"Integrated Security=true;" +
                                 $"Pooling=true;";
 
             services.AddDbContext<SylvreWebApiContext>(opt => opt.UseNpgsql(connectionStr));
