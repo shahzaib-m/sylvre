@@ -77,12 +77,10 @@ namespace Sylvre.WebAPI
                                 $"Integrated Security=true;" +
                                 $"Pooling=true;";
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<SylvreWebApiContext>(opt =>
-                opt.UseNpgsql(connectionStr));
+            services.AddDbContext<SylvreWebApiContext>(opt => opt.UseNpgsql(connectionStr));
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
-
 
             var key = Encoding.ASCII.GetBytes(Configuration["AppSecret"]);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
