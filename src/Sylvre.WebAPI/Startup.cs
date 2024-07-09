@@ -248,8 +248,8 @@ namespace Sylvre.WebAPI
                 app.UseForwardedHeaders(forwardedHeadersOpts);
             }
 
+            app.UseRouting();
             app.UseAuthentication();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
