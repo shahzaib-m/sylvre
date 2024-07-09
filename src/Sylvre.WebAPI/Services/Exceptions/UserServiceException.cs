@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Sylvre.WebAPI.Services.Exceptions
 {
@@ -14,10 +13,6 @@ namespace Sylvre.WebAPI.Services.Exceptions
         }
 
         public UserServiceException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        protected UserServiceException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
