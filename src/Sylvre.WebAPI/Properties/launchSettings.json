@@ -6,12 +6,13 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:64833;http://localhost:64834"
+      "applicationUrl": "http://localhost:8080",
+      "launchUrl": "api"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api",
       "environmentVariables": {
         "ASPNETCORE_HTTP_PORTS": "8080"
       },
