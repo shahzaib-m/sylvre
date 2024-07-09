@@ -34,6 +34,6 @@ jobs:
       run: |
         IMAGE_NAME=ghcr.io/shahzaib-m/sylvre
         VERSION=${{ env.VERSION }}
-        docker build -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest .
+        docker build -f src/Sylvre.WebAPI/Dockerfile -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest src/
         docker push $IMAGE_NAME:$VERSION
         docker push $IMAGE_NAME:latest
