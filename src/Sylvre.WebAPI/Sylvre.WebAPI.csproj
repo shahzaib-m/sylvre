@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>07ceb5c6-6942-4ebb-a2a2-8343ac11e365</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.4.0</AssemblyVersion>
-    <FileVersion>1.4.0</FileVersion>
-    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.1</AssemblyVersion>
+    <FileVersion>1.4.1</FileVersion>
+    <Version>1.4.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
