@@ -7,13 +7,12 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>07ceb5c6-6942-4ebb-a2a2-8343ac11e365</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.4.1</AssemblyVersion>
-    <FileVersion>1.4.1</FileVersion>
-    <Version>1.4.1</Version>
+    <AssemblyVersion>1.4.2</AssemblyVersion>
+    <FileVersion>1.4.2</FileVersion>
+    <Version>1.4.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.SwaggerUI.Themes" Version="0.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -34,6 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <Folder Include="wwwroot\" />
+	  <Folder Include="wwwroot\api\swagger-ui-themes\" />
   </ItemGroup>
 </Project>

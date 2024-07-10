@@ -19,8 +19,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using AspNetCore.SwaggerUI.Themes;
-
 using Sylvre.WebAPI.Swagger;
 using Sylvre.WebAPI.Entities;
 using Sylvre.WebAPI.Services;
@@ -121,15 +119,20 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseStaticFiles();
 app.UseSwagger(c =>
 {
     c.RouteTemplate = "api/documentation/{documentName}/docs.json";
 });
-app.UseSwaggerUI(ModernStyle.Dark, c =>
+app.UseSwaggerUI(c =>
 {
     c.RoutePrefix = "api";
     c.DocumentTitle = "Sylvre Web API Interactive Documentation";
-    c.SwaggerEndpoint("/api/documentation/v1/docs.json", "Sylvre Web API V1");
+    c.SwaggerEndpoint("documentation/v1/docs.json", "Sylvre Web API V1");
+
+    c.InjectStylesheet("swagger-ui-themes/modern.common.css");
+    c.InjectStylesheet("swagger-ui-themes/modern.dark.css");
+    c.InjectJavascript("swagger-ui-themes/modern.js");
 });
 
 if (!string.IsNullOrWhiteSpace(builder.Configuration["TrustedProxies"]))
