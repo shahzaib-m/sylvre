@@ -254,9 +254,13 @@ body {
     }
 }
 
-/*.swagger-ui .topbar a {
-            color: #fff;
-        }*/
+.swagger-ui .topbar a {
+    margin: 0px 10px;
+}
+
+.swagger-ui .auth-btn-wrapper {
+    justify-content: right;
+}
 
 .swagger-ui .topbar .download-url-wrapper input[type=text],
 .swagger-ui .topbar .download-url-wrapper .select-label select {
@@ -270,6 +274,10 @@ body {
 .swagger-ui .topbar .download-url-wrapper .download-url-button {
     background: var(--topbar-download-url-button-background-color, #62a03f);
     color: var(--topbar-download-url-button-color, #fff);
+}
+
+.swagger-ui .info {
+    margin: 50px 0px 20px 0px;
 }
 
 /* Info-box (title, description, contact info...) */
@@ -330,18 +338,48 @@ body {
 .swagger-ui .auth-container {
     border-bottom: 1px solid var(--auth-container-border-bottom-color, #ebebeb); /*divider; overridden by :last-of-type*/
     color: var(--swagger-main-color, #3b4151);
+    padding: 10px 0px 10px 10px;
 }
+
+    .swagger-ui .auth-container:last-of-type {
+        padding: 10px 0px 10px 10px;
+    }
 
     .swagger-ui .auth-container .errors {
         background-color: var(--auth-container-background-color, #fee);
         color: var(--auth-container-errors-color, red);
     }
 
+    .swagger-ui .auth-container input {
+        width: 100%;
+    }
+
+    .swagger-ui .auth-container .wrapper {
+        padding: 0px 13px 0px 0px;
+    }
+
+.swagger-ui .auth-btn-wrapper .btn-done {
+    margin-left: 5px;
+}
+
+.swagger-ui .scheme-container .schemes .auth-wrapper .authorize {
+    padding: 5px 15px
+}
+
+.swagger-ui .parameters-col_description select {
+    margin-top: 10px;
+}
+
 .swagger-ui .btn.authorize {
     background-color: var(--btn-authorize-background-color, transparent);
     border-color: var(--btn-authorize-border-color, #49cc90);
     color: var(--btn-authorize-font-color, #49cc90);
+    line-height: 1.15;
 }
+
+    .swagger-ui .btn.authorize span {
+        padding: 2px 5px 0 0;
+    }
 
     .swagger-ui .btn.authorize svg {
         fill: var(--btn-authorize-svg-fill-color, #49cc90);
@@ -911,7 +949,7 @@ body {
     border: 1px solid var(--model-section-border-color, rgba(59,65,81,.3));
     border-radius: 0.5rem;
     padding: 0;
-    margin: 0;
+    margin: 0px 0px 40px 0px;
 }
 
     .swagger-ui section.models.is-open h4 {
@@ -921,6 +959,7 @@ body {
     .swagger-ui section.models h4 {
         color: var(--model-section-header-color, #606060);
         padding: 15px;
+        font-size: 18px;
     }
 
         .swagger-ui section.models h4:hover {
@@ -933,7 +972,7 @@ body {
 
         .swagger-ui section.models h4 button.models-control {
             color: var(--model-section-header-color, #606060);
-            padding: 20px;
+            padding: 0px 10px 0px 5px;
         }
 
     .swagger-ui section.models h5 {

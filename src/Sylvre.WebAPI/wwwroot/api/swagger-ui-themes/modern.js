@@ -11,10 +11,7 @@ window.onpageshow = function () {
         if (document.getElementById("swagger-ui") != null) {
             clearInterval(swaggerUILoaded);
 
-            console.log('Hello modern Swagger UI!');
-
             configurePinnableTopbar();
-
             setUpScrollToTopButton();
         }
     }, 100);
