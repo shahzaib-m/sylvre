@@ -80,9 +80,9 @@ namespace Sylvre.WebAPI.Controllers
             else
             {
                 Response.Cookies.Append("access-token", accessToken,
-                    GenerateTokenCookieOptions(accessTokenExpiryUtc));
+                    GenerateTokenCookieOptions(accessTokenExpiryUtc, AuthTokenType.Access));
                 Response.Cookies.Append("refresh-token", refreshToken,
-                    GenerateTokenCookieOptions(refreshTokenExpiryUtc));
+                    GenerateTokenCookieOptions(refreshTokenExpiryUtc, AuthTokenType.Refresh));
 
                 return Ok(new AuthResponse
                 {
@@ -141,9 +141,9 @@ namespace Sylvre.WebAPI.Controllers
             else
             {
                 Response.Cookies.Append("access-token", accessToken,
-                    GenerateTokenCookieOptions(accessTokenExpiryUtc));
+                    GenerateTokenCookieOptions(accessTokenExpiryUtc, AuthTokenType.Access));
                 Response.Cookies.Append("refresh-token", refreshToken,
-                    GenerateTokenCookieOptions(refreshTokenExpiryUtc));
+                    GenerateTokenCookieOptions(refreshTokenExpiryUtc, AuthTokenType.Refresh));
 
                 return Ok(new AuthResponse
                 {
@@ -188,12 +188,14 @@ namespace Sylvre.WebAPI.Controllers
         /// Builds the cookie options for auth tokens.
         /// </summary>
         /// <param name="expiryUtc">When this cookie expires.</param>
+        /// <param name="tokenType">The type of the auth token.</param>
         /// <returns>The generated cookie options.</returns>
-        private static CookieOptions GenerateTokenCookieOptions(DateTime expiryUtc)
+        private static CookieOptions GenerateTokenCookieOptions(DateTime expiryUtc, AuthTokenType tokenType)
         {
             return new CookieOptions
             {
-                Path = "/",
+                // ensures browsers will only include refresh token on /api/auth actions
+                Path = tokenType == AuthTokenType.Refresh ? "/api/auth" : "/",
                 HttpOnly = true,
                 Secure = true,
                 IsEssential = true,
