@@ -330,5 +330,3 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/src/Sylvre.Core/Sylvre.Core.xml
-/src/Sylvre.WebAPI/Sylvre.WebAPI.xml

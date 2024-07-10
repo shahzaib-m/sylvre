@@ -2,26 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>07ceb5c6-6942-4ebb-a2a2-8343ac11e365</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.3.0</AssemblyVersion>
-    <FileVersion>1.3.0</FileVersion>
-    <Version>1.3.0</Version>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>Sylvre.WebAPI.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>Sylvre.WebAPI.xml</DocumentationFile>
-    <WarningLevel>3</WarningLevel>
-    <NoWarn>1701;1702;1591</NoWarn>
+    <AssemblyVersion>1.4.0</AssemblyVersion>
+    <FileVersion>1.4.0</FileVersion>
+    <Version>1.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.SwaggerUI.Themes" Version="0.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -42,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\api\swagger-ui\theme-flattop.css" />
+	  <Folder Include="wwwroot\" />
   </ItemGroup>
-
 </Project>
