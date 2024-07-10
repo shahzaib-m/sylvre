@@ -139,8 +139,8 @@ namespace Sylvre.WebAPI.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userId.ToString()),
-                new Claim(ClaimTypes.Role, IsAdmin ? "Admin" : "User")
+                new (JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new ("role", IsAdmin ? "Admin" : "User")
             };
             if (tokenId != null)
             {

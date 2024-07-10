@@ -59,6 +59,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("access-token", new OpenApiSecurityScheme
     {
         Name = "Access token",
+        Description = "The access token returned in the auth/login or auth/refresh request",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
@@ -67,6 +68,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("refresh-token", new OpenApiSecurityScheme
     {
         Name = "Refresh token",
+        Description = "The refresh token returned in the auth/login or auth/refresh request",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
@@ -162,6 +164,7 @@ app.Run();
 
 static void ConfigureJwtBearerOptions(JwtBearerOptions options, AuthTokenType tokenType, byte[] key)
 {
+    options.MapInboundClaims = false;
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
@@ -201,5 +204,7 @@ static void ConfigureJwtBearerOptions(JwtBearerOptions options, AuthTokenType to
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidIssuer = "sylvre",
         ValidAudience = "sylvre-clients",
+        NameClaimType = "sub",
+        RoleClaimType = "role",
     };
 }
