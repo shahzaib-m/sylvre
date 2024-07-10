@@ -320,11 +320,7 @@ body {
         display: flex;
         flex: 1;
         justify-content: flex-end;
-        border: 1px solid var(--auth-wrapper-border-color, #d5d5d5);
         padding: 0;
-        border-radius: 5px;
-        box-shadow: 0px 3px 5px -5px var(--auth-wrapper-box-shadow-color, black);
-        background: var(--auth-wrapper-background-color, white);
     }
 
     .swagger-ui .scheme-container .schemes > label {
@@ -358,6 +354,7 @@ body {
     border: 1px solid var(--opblock-tag-section-border-color, #dddddd);
     border-radius: 0.5rem;
     margin-block: 1rem;
+    padding: 0px 10px;
 }
 
 .swagger-ui .opblock-tag,
@@ -923,7 +920,7 @@ body {
 
     .swagger-ui section.models h4 {
         color: var(--model-section-header-color, #606060);
-        padding: 0;
+        padding: 15px;
     }
 
         .swagger-ui section.models h4:hover {
