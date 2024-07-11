@@ -1,0 +1,70 @@
+{
+  "name": "sylvre-webapp",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Vue.js frontend for sylvre-webapi",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahzaib-m/sylvre-webapp.git"
+  },
+  "author": "Shahzaib Mirani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shahzaib-m/sylvre-webapp/issues"
+  },
+  "homepage": "https://github.com/shahzaib-m/sylvre-webapp#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/free-regular-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^2.0.10",
+    "axios": "^1.7.2",
+    "bootstrap-vue": "^2.23.1",
+    "lodash": "^4.17.21",
+    "vue": "^2.7.16",
+    "vue-codemirror": "^4.0.6",
+    "vuelidate": "^0.7.7"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@babel/eslint-parser": "^7.24.7",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "vue-template-compiler": "^2.7.16"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "no-mixed-spaces-and-tabs": 0,
+      "vue/multi-word-component-names": "off"
+    },
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
