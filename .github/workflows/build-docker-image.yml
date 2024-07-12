@@ -19,7 +19,7 @@ jobs:
     - name: Extract version
       id: get_version
       run: |
-        VERSION=$(xmlstarlet sel -t -v "//Project/PropertyGroup/Version" src/Sylvre.WebAPI/Sylvre.WebAPI.csproj)
+        VERSION=$(xmlstarlet sel -t -v "//Project/PropertyGroup/Version" core-and-webapi/Sylvre.WebAPI/Sylvre.WebAPI.csproj)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Set up Docker Buildx
@@ -32,6 +32,6 @@ jobs:
       run: |
         IMAGE_NAME=ghcr.io/shahzaib-m/sylvre
         VERSION=${{ env.VERSION }}
-        docker build -f src/Sylvre.WebAPI/Dockerfile -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest src/
+        docker build -f core-and-webapi/Sylvre.WebAPI/Dockerfile -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest core-and-webapi/
         docker push $IMAGE_NAME:$VERSION
         docker push $IMAGE_NAME:latest
