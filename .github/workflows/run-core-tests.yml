@@ -19,11 +19,11 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      working-directory: src/Sylvre.Tests
+      working-directory: core-and-webapi/Sylvre.Tests
       run: dotnet restore
     - name: Build
-      working-directory: src/Sylvre.Tests
+      working-directory: core-and-webapi/Sylvre.Tests
       run: dotnet build --no-restore
     - name: Test
-      working-directory: src/Sylvre.Tests
+      working-directory: core-and-webapi/Sylvre.Tests
       run: dotnet test --no-build --verbosity normal
