@@ -5,12 +5,12 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+WORKDIR /core-and-webapi
 COPY ["Sylvre.WebAPI/Sylvre.WebAPI.csproj", "Sylvre.WebAPI/"]
 COPY ["Sylvre.Core/Sylvre.Core.csproj", "Sylvre.Core/"]
 RUN dotnet restore "./Sylvre.WebAPI/Sylvre.WebAPI.csproj"
 COPY . .
-WORKDIR "/src/Sylvre.WebAPI"
+WORKDIR "/core-and-webapi/Sylvre.WebAPI"
 RUN dotnet build "./Sylvre.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
