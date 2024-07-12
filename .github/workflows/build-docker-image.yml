@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build combined Sylvre Docker image
 
 on:
   push:
@@ -32,6 +32,6 @@ jobs:
       run: |
         IMAGE_NAME=ghcr.io/shahzaib-m/sylvre
         VERSION=${{ env.VERSION }}
-        docker build -f core-and-webapi/Sylvre.WebAPI/Dockerfile -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest core-and-webapi/
+        docker build -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest .
         docker push $IMAGE_NAME:$VERSION
         docker push $IMAGE_NAME:latest
