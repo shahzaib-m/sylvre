@@ -7,9 +7,9 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>07ceb5c6-6942-4ebb-a2a2-8343ac11e365</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <AssemblyVersion>1.6.0</AssemblyVersion>
-    <FileVersion>1.6.0</FileVersion>
-    <Version>1.6.0</Version>
+    <AssemblyVersion>1.6.1</AssemblyVersion>
+    <FileVersion>1.6.1</FileVersion>
+    <Version>1.6.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

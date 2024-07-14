@@ -10,7 +10,7 @@
       <b-navbar-nav>
         <b-nav-item class="nav-item" href="/swagger/index.html" target="_blank">
           Interactive API
-          <fa-icon icon="code"></fa-icon>
+          <fa-icon :icon="['fas', 'code']" />
         </b-nav-item>
         <b-nav-item class="nav-item" href="https://github.com/shahzaib-m/sylvre" target="_blank">
           Source code
