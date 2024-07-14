@@ -8,19 +8,15 @@
 
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item class="nav-item" v-bind:href="sylvreDocsUrl" target="_blank">
-          Documentation
-          <fa-icon icon="book"></fa-icon>
+        <b-nav-item class="nav-item" href="/swagger/index.html" target="_blank">
+          Interactive API
+          <fa-icon icon="code"></fa-icon>
         </b-nav-item>
-        <b-nav-item class="nav-item" v-bind:href="mainProjectGithubUrl" target="_blank">
-          Core/WebAPI
+        <b-nav-item class="nav-item" href="https://github.com/shahzaib-m/sylvre" target="_blank">
+          Source code
           <fa-icon :icon="['fab', 'github']"></fa-icon>
         </b-nav-item>
-        <b-nav-item class="nav-item" v-bind:href="webAppProjectGithubUrl" target="_blank">
-          Web App
-          <fa-icon :icon="['fab', 'github']"></fa-icon>
-        </b-nav-item>
-        <b-nav-item class="nav-item" v-bind:href="authorUrl" target="_blank">
+        <b-nav-item class="nav-item" href="https://shahzaibm.com" target="_blank">
           by shahzaib-m
         </b-nav-item>
       </b-navbar-nav>
@@ -74,14 +70,6 @@ export default {
     isGettingUserDetails: Boolean,
     isLoggingOut: Boolean,
     username: String
-  },
-  data() {
-    return {
-      sylvreDocsUrl: process.env.VUE_APP_SYLVRE_DOCS_URL,
-      mainProjectGithubUrl: process.env.VUE_APP_SYLVRE_MAIN_PROJECT_GITHUB,
-      webAppProjectGithubUrl: process.env.VUE_APP_SYLVRE_WEBAPP_PROJECT_GITHUB,
-      authorUrl: process.env.VUE_APP_AUTHOR_URL
-    }
   },
   computed: {
     isLoadingUser: function() {

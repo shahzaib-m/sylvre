@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosOptions = {
-    baseURL: process.env.VUE_APP_SYLVRE_API_URL,
+    baseURL: "/api",
     withCredentials: true,
     timeout: 5000
 };
