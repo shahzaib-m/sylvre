@@ -31,8 +31,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Sylvre.Core\Sylvre.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-	  <Folder Include="wwwroot\api\swagger-ui-themes\" />
-  </ItemGroup>
 </Project>

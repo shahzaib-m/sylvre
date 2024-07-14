@@ -125,11 +125,11 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseSwagger(c =>
 {
-    c.RouteTemplate = "api/documentation/{documentName}/docs.json";
+    c.RouteTemplate = "swagger/documentation/{documentName}/docs.json";
 });
 app.UseSwaggerUI(c =>
 {
-    c.RoutePrefix = "api";
+    c.RoutePrefix = "swagger";
     c.DocumentTitle = "Sylvre Web API Interactive Documentation";
     c.SwaggerEndpoint("documentation/v1/docs.json", "Sylvre Web API V1");
 
