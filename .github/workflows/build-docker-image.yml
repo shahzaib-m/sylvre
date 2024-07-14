@@ -3,6 +3,13 @@ name: Build combined Sylvre Docker image
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'core-and-webapi/Sylvre.Core/**'
+      - 'core-and-webapi/Sylvre.WebAPI/**'
+      - 'webapp-client/public/**'
+      - 'webapp-client/src/**'
+      - 'webapp-client/*.json'
+      - 'webapp-client/*.js'
   workflow_dispatch:
 
 jobs:
