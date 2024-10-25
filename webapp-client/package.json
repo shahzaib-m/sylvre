@@ -27,7 +27,7 @@
     "axios": "^1.7.4",
     "bootstrap-vue": "^2.23.1",
     "lodash": "^4.17.21",
-    "vue": "^2.7.16",
+    "vue": "^3.0.0",
     "vue-codemirror": "^4.0.6",
     "vuelidate": "^0.7.7"
   },
